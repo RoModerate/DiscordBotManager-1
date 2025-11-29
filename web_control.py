@@ -11,7 +11,7 @@ import requests
 from database import Database
 
 app = Flask(__name__)
-app.secret_key = os.getenv('SECRET_KEY', 'spiritual-battlegrounds-secret-key-2025')
+app.secret_key = os.getenv('SECRET_KEY', 'change-this-in-production')
 CORS(app)
 bot_process = None
 db = Database()
