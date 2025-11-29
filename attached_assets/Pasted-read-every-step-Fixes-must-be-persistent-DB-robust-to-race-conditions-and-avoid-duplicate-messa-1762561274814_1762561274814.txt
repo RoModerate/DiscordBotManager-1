@@ -1,0 +1,210 @@
+read every step. Fixes must be persistent (DB), robust to race conditions, and avoid duplicate messages or “This interaction failed” errors. Use ButtonStyle.Secondary for gray buttons and ButtonStyle.Link (or a simple redirect message) for blue help links where appropriate. No emoji UI in config — use Discord-style markdown and clean layouts (> blockquotes).
+
+1 — Core interaction stability (global)
+
+Ensure all interactions are acknowledged or deferred within 3 seconds to prevent “This interaction failed.”
+
+For buttons/selects/modals: always call interaction.deferReply({ ephemeral: true }) or interaction.deferUpdate() when appropriate, then editReply or followUp.
+
+Ensure commands and components are registered only once on startup (guard duplicate registration in deploy).
+
+Persist all dynamic state (tickets, claims, counts, AFK, verifies) to DB — do not rely on memory-only state.
+
+2 — Ticket UI & !ticketpanel (select-only, no slash panel command)
+
+Remove slash /ticketpanel and make the prefix command !ticketpanel (owner/manager or role-restricted). When !ticketpanel is run it sends a single persistent message (one message per channel) with:
+
+Intro text (clean, no emojis):
+
+Ticket System
+> Choose a category from the menu below to open a ticket.
+
+
+A single select menu (no buttons) with exactly these options (label only, no emoji):
+
+Support Ticket (value: support)
+
+Request Content Creator (value: cc)
+
+Report a Member (value: report)
+
+Warning Appeal (value: appeal)
+
+Behavior when a user selects an option:
+
+Immediately open a modal asking: Reason for opening this ticket (multi-line). Do not create any second confirmation step — the modal is the reason input.
+
+After modal submit, create a new channel under the correct category (use the category IDs previously configured in /config or default mapping).
+
+Channel naming: <TAG>-username where TAG = S / CC / R / W. (Example: S-johndoe). No emojis in name.
+
+Permission overwrites: only ticket creator + staff role(s) + owner can view. Validate overwrites at creation.
+
+Post one plain text welcome message in the ticket containing:
+
+The creator mention and the reason text (timestamped).
+
+Ping the staff user 1383270362707656774 and the staff role from config.
+
+Add two gray buttons in the ticket channel: Claim and Close (ButtonStyle.Secondary). Claim toggles claimed state; Close triggers transcript flow.
+
+When staff claims, update channel topic to: Status: CLAIMED by <staff-tag> and change claim button to disabled/green (visual). If unclaimed, topic Status: UNCLAIMED.
+
+Prevent double-creation/race conditions (use DB unique constraints keyed by user+open-ticket-type).
+
+Ticket transcript: when closed, export full plain-text transcript (timestamp + author + content) and send it to transcript channel ID 1420538005936013403 along with who claimed and closed the ticket. Store transcript text and metadata in DB.
+
+3 — Fix “This interaction failed”
+
+For selects/modals/buttons, always deferUpdate() or deferReply() at start, then editReply() or followUp() later.
+
+Register component customIds with unambiguous prefixes (e.g., ticket_select_guildid, ticket_modal_submit_guildid_userid, ticket_claim_channelid) and validate IDs on interaction.
+
+Ensure you return an ephemeral acknowledgement to the user immediately for actions that open modals.
+
+4 — /config redesign (owner-only and professional)
+
+Replace old /config with a single /config slash command that opens a paged interactive embed. Also provide a prefix .config if owner prefers prefix.
+
+UI requirements:
+
+No emoji, clean markdown, use > for blockquote lines and code blocks for IDs.
+
+Buttons are gray (ButtonStyle.Secondary) labeled: Previous, Next, Reload, Submit.
+
+Each page shows current saved values and input fields or select menus to change them.
+
+Config fields to include:
+
+Ticket category IDs mapping (support, cc, report, appeal). Validate existence on save.
+
+Staff role(s) for ticket access and staff ping user.
+
+Transcript channel ID (1420538005936013403).
+
+Welcome channel ID and verification channel/role.
+
+AI provider endpoint toggle and API key input (owner only).
+
+All saves are persisted to DB and return ✅ Configuration saved as an ephemeral reply. Validate and reject invalid IDs with friendly messages.
+
+5 — Counting system fixes
+
+Channel(s): ensure target counting channel ID(s) configured in /config. For now enforce English only for 1409299795318804612 (remove Spanish).
+
+Rules:
+
+Store lastNumber, mistakes map, and per-user cooldownUntil in DB.
+
+Enforce 5-second cooldown per user: if they post earlier, respond ephemeral or reply: Please wait before typing again. (plain text).
+
+Wrong number increments mistakes for that user. After 5 mistakes block that user from counting for 1 hour.
+
+On correct number, react with a checkmark ✅ and update DB.
+
+Robustness:
+
+Validate numeric input only; ignore non-numeric messages in counting channel unless admin command.
+
+Prevent two correct numbers in a row by same user.
+
+Persist state so restarts keep the counter.
+
+6 — !setupverify simplification
+
+Replace the current message content with only:
+
+One gray Verify button (ButtonStyle.Secondary). This is the only verify UI element visible.
+
+One blue Need help? button (ButtonStyle.Link or ButtonStyle.Primary) that when clicked redirects the user to support channel ID 1389999965979283608 (if Discord API prevents a direct link, clicking it should send ephemeral message with jump link: <#1389999965979283608>).
+
+Do not include any other text or embed. Remove "Click the button below..." lines.
+
+When a user clicks Verify:
+
+If user already has verified role, reply ephemeral: You are already verified.
+
+Otherwise: assign the verified role (from /config), send DM to the user with a single blockquote line:
+
+> Verification complete — you have been successfully verified in {GUILD_NAME}.
+
+
+DM must include an embed that shows the user's Roblox name and avatar:
+
+Fetch Roblox username and avatar by using stored robloxId in DB (populated from prior Roblox linking). If Roblox ID not found, show a graceful placeholder text Roblox profile not linked.
+
+Embed: title Roblox Profile, fields: Username: <robloxName>, ID: <robloxId>, and set embed thumbnail to Roblox avatar URL.
+
+Log an embed into 1411710143598690404 with the Roblox info (or the "not linked" message) and the Discord user tag/id and timestamp.
+
+Disable or visually mark the Verify button for that user on that message (prevent duplicate presses). Use DB to track who verified to avoid race conditions.
+
+Ensure the Verify message does not auto-delete.
+
+7 — Built-in free AI & /aisetup
+
+Add /aisetup (owner only) to enable AI and set provider endpoint and API key. Store these securely in DB or environment variables. The default suggested provider is https://www.apifreellm.com/docs but owner can configure any endpoint.
+
+Provide rate-limiting and a local cache for identical prompts (configurable TTL).
+
+Chat usage:
+
+If a user pings the bot or uses /ask or @Bot ask …, the bot uses the configured free AI endpoint and replies in-channel.
+
+If the AI is disabled or provider errors, reply: AI chat is currently disabled. Contact an admin. rather than failing silently.
+
+!teach:
+
+!teach "trigger" => "response" stores pairs in DB. Only allowed roles (set via /config) can teach by default.
+
+When messages/tickets contain the exact trigger, return the taught response without calling external AI (priority: DB taught responses > external AI).
+
+Add admin commands: !teach list, !teach remove <id>.
+
+8 — Acceptance tests (must pass)
+
+For each change, run the tests and confirm:
+
+Ticket/select
+
+!ticketpanel sends a persistent message with a select menu.
+
+Selecting an option opens a modal; submitting creates a ticket channel in the correct category with name format TAG-username.
+
+Ticket has Claim and Close gray buttons. Claim updates channel topic and claim stored in DB. Close dumps transcript to 1420538005936013403.
+
+Verify
+
+!setupverify shows only two buttons (gray Verify and blue Need help?). Clicking Need help shows/redirects to <#1389999965979283608>. Clicking Verify assigns role, sends DM with quoted verification message + embed with Roblox info (or placeholder), and logs to 1411710143598690404. No duplicate messages.
+
+Counting
+
+Counting channel accepts numbers only, enforces 5s cooldown, increments correctly, stores state, rejects Spanish messages, and enforces 5 mistakes lockout.
+
+AI
+
+/aisetup toggles AI on and sets endpoint. @Bot ask uses AI. !teach stores triggers and later responses are given before calling external AI.
+
+/config
+
+/config pages load saved values, validate IDs, and persist new values. Buttons are gray and labeled Previous/Next/Reload/Submit. Owner-only parts are protected.
+
+Stability
+
+No “This interaction failed” errors on selects/modals/buttons.
+
+No duplicate messages on verification, ticket creation, or general commands.
+
+9 — Implementation notes for the Replit AI agent / dev
+
+Use DB transactions or locks during ticket creation/claim to prevent duplicates.
+
+Use interaction.deferUpdate() for select menu actions before opening a modal.
+
+For Verify button state, track per-user verification in DB; if the same Verify message is pressed by two users concurrently, only the first should succeed.
+
+Always validate channel/role IDs saved via /config exist in the guild before saving. Return helpful errors when invalid.
+
+For Roblox data in verify embed: prefer stored robloxId from linking flow; if missing, do not call external API repeatedly — return placeholder and log missing link.
+
+Paste this into Replit AI and instruct it: "Apply changes and deploy to Pella.app — run acceptance tests in order and report any failing cases with logs."

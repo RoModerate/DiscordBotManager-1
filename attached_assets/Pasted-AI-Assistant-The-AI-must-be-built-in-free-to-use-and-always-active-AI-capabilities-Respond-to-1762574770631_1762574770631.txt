@@ -1,0 +1,119 @@
+AI Assistant
+
+The AI must be built-in, free to use, and always active.
+
+AI capabilities:
+
+Respond to users’ queries directly in text, no unnecessary embeds.
+
+Support /teach and !teach:
+
+Users can train the bot.
+
+The AI remembers the training permanently.
+
+Example: !teach @Bot if a user wants to report a player, it must be done in #support → the bot must enforce this rule correctly in the future.
+
+Context retention:
+
+Remember Roblox usernames, Discord IDs, categories, roles, and server structure.
+
+Avoid repeating previous questions incorrectly.
+
+Respond intelligently in tickets:
+
+Suggest staff involvement if necessary.
+
+Ask for STOP/START commands to pause/resume conversation.
+
+Provide accurate information only.
+
+For suggestion and bug channels:
+
+Suggestion channel (1409310962103877752) → forward useful suggestions to 1436559543139045437 with user icon.
+
+Bug report channel (1409311252400050196) → log appropriately.
+
+AI should analyze user activity to determine contributions by role or user for reporting purposes.
+
+5. Counting System
+
+In channel 1431428103674138634:
+
+Users count from 1 → 5000.
+
+Maximum 5 mistakes per user.
+
+5-second cooldown between messages.
+
+Add checks for correct sequence.
+
+Provide messages like “please wait before typing” if cooldown is active.
+
+Remove Spanish messages, all instructions in English only.
+
+6. Level-Up System
+
+Track user activity and increment levels correctly:
+
+Display: @user is now Level 1, then Level 2, Level 3, etc.
+
+Levels increment based on message activity.
+
+Announcements go in channel 1409304816718709006.
+
+Use plain text, no embeds.
+
+7. Command Management
+
+/config and .config:
+
+Owner can configure who can use commands and which roles.
+
+Buttons: Next, Previous, Reload, Submit
+
+Manage ticket categories, verification, AFK commands, and AI settings.
+
+Must be error-free, display useful error messages if misconfigured.
+
+Commands to implement:
+
+.say / /say → bot repeats message.
+
+.AFK / /unAFK → manage AFK status.
+
+/giveaway → basic giveaway functionality.
+
+8. Role-Based Permissions
+
+Commands and utilities must be restricted based on roles:
+
+Trial Moderator: Warns, Timeout (1383270277147787294)
+Junior Moderator: Kick + Trial Mod perms (1409873374288674816)
+Moderator: Clear + Junior Mod perms (1383175157186564286)
+Appeals Manager: None unless implementing appeals (1423157373295525979)
+Senior Admin: Junior Admin perms (1383145641491828746)
+Junior Admin: All utilities (1409874361615388746)
+Administrator: All moderation/utilities (1388254732543590492)
+Head of Staff/HOS: Same as Admin (1409874452866400346)
+Community Manager: Almost all commands (1411739899639496704)
+Server Manager: Everything (1383270529430978590)
+
+
+Only the specified roles may access particular commands.
+
+9. General Notes
+
+The bot must join voice channels when required.
+
+No duplicate messages for any command or system.
+
+Professional appearance in all embeds, select menus, and button interactions.
+
+Keep everything simple, reliable, and intuitive for users.
+
+Ensure AI is robust, fully integrated, and handles tickets, counting, level-ups, and marketplace actions.
+
+All bugs from previous systems must be eliminated.
+
+Focus on smooth, polished UX and clear Discord formatting.

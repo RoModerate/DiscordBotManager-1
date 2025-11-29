@@ -1,0 +1,197 @@
+Global stability & interaction handling (must do first)
+
+Ensure every interaction (select, modal, button) is acknowledged within 3 seconds using deferReply, deferUpdate, or equivalent to avoid “This interaction failed.”
+
+Guard against duplicate processing:
+
+Use a DB lock or atomic flag before creating channels or assigning roles.
+
+Prevent multiple registrations of commands/components on startup.
+
+Persist all runtime state (tickets, claims, counts, AI toggle, teaches) to the database — do not rely on memory only.
+
+2 — !ticketpanel (exact UI/UX spec — NO EMOJI anywhere)
+
+Command: !ticketpanel (prefix command only; owner / admin role required)
+
+When run it must:
+
+Send one persistent embed message in the current channel (no additional text). The embed must be clean, use Discord markdown, and include the notice + allowed/disallowed lists.
+
+Embed content (exact formatting to use):
+
+**Notice**
+> If this is your first time using our ticket system, please read the guide below.
+> These guides will help you understand the process. Following them will significantly speed up handling your ticket.
+
+**Allowed Tickets**
+- User Reports
+- Staff Reports
+- Bug Reports
+- Warning Appeals
+- Content Creator Requests
+- Other Server-Related Inquiries
+
+**Disallowed Tickets**
+- General Game Questions
+- Suggestions
+- Role Requests (Staff, Tester, Helper, etc.)
+
+
+Below the embed: show a single select menu (dropdown) with these options (label and description only; no emoji):
+
+Support Ticket — Open a support request
+
+Request Content Creator — Apply or request content creator role
+
+Report Player — Report a member for rule violations
+
+Warning Appeal — Appeal a warning you received
+
+3 — Select flow & modal (exact behavior)
+
+When a user selects an option from the dropdown:
+
+Immediately deferUpdate() the interaction.
+
+Open a modal asking:
+
+Title: Reason for opening this ticket
+
+Input field (multi-line): Describe your issue in detail (required)
+
+When the modal is submitted, create a ticket channel under the correct category (category IDs are configured in /config; if not configured, return a user-friendly error: Ticket category not configured. Please contact an administrator.).
+
+Channel naming convention (exact):
+
+Unclaimed: 《RED》・username (use text RED not emoji)
+
+Claimed: 《GREEN》・username
+
+Example channel name: 《RED》・johnsmith
+
+(If your system cannot use angle brackets or special chars, use RED-username / GREEN-username.)
+
+Permissions: ticket channel visible only to:
+
+The ticket creator
+
+Staff role(s) defined in /config
+
+Server owner
+
+Bot
+
+Validate and fix permission overwrites at creation.
+
+4 — Ticket initial message (embed inside ticket)
+
+The bot should send a single top embed inside the channel with the following fields and formatting (no extra text messages):
+
+**Ticket opened by:** @username
+**Type:** Support / Request Content Creator / Report Player / Warning Appeal
+**Reason:**
+
+
+Then include a code block with the reason:
+
+```Reason:
+<user-submitted text here>
+
+- Also include a **small thumbnail** (embed thumbnail) showing the user’s Roblox avatar (if linked). If Roblox profile not linked, show `Roblox profile not linked` in a field.
+
+---
+
+## 5 — Claim & Close buttons (inside ticket channel)
+- Add two **gray** buttons (ButtonStyle.Secondary): **Claim** and **Close** (displayed in the ticket channel message under the embed).
+- **Claim behavior:**
+  - When staff clicks Claim:
+    - `deferUpdate()` immediately.
+    - Record claimer in DB (`claimedBy`, `claimedAt`).
+    - Edit the top embed to add a new blockquote line:  
+      `> This ticket has been claimed by @staff-user`  
+      (do not send a separate text reply — only edit the embed)
+    - Update channel name to the **claimed** format (GREEN).
+    - Change the Claim button to disabled (or label `Claimed`).
+- **Close behavior:**
+  - When staff clicks Close:
+    - Open a modal prompting **Reason for closing / resolution summary** (required).
+    - On modal submit:
+      - Generate a **plain-text transcript** (timestamp, author, message) for the whole ticket channel.
+      - Post the transcript to the **transcript channel** (ID `1420538005936013403`) including:
+        - Ticket ID (unique)
+        - Ticket type
+        - Creator (tag + id)
+        - Claimed by (tag + id) or `Unclaimed`
+        - Close reason (from modal)
+        - Full transcript body
+      - Store transcript & metadata in DB (transcript text, closedBy, closedAt).
+      - Archive or delete the ticket channel (owner decision) after posting transcript (confirm archival policy in `/config`).
+
+**Important:** fix the current bug that says “This is not a valid ticket channel” — ensure closing checks channel metadata and ticket DB record; if channel has a valid ticket record, allow closing.
+
+---
+
+## 6 — Transcript format
+- Transcript must be plain text file or a long message (if small), include timestamps, and include the staff who closed it. Save transcript text to DB and post in `1420538005936013403` with a short header embed that includes ticket ID and participants.
+
+---
+
+## 7 — Counting system fix (channel ID: `1431428103674138634`)
+- Ensure counting code:
+  - Reads and writes `lastNumber`, per-user `mistakes` count, and `cooldownUntil` to DB.
+  - Validates numeric only messages.
+  - Enforces 5-second cooldown per user (reply with plain text: `Please wait before typing again.`).
+  - On wrong number:
+    - Increment user's mistake count.
+    - Reply: ``Wrong number. Expected <expected>. Mistakes: <n>/5.``
+    - If mistakes reach 5, block user for 1 hour and notify them `You have been locked from counting for 1 hour due to 5 mistakes.`
+  - On correct number:
+    - React with a checkmark (`✅`) to the message.
+    - Update lastNumber in DB.
+  - Prevent the same user posting twice in a row as correct poster.
+  - Persist state so restarts do not reset the counter.
+
+---
+
+## 8 — AI Chat fix (`/aisetup`, ping responses, `!teach`)
+- `/aisetup` (owner-only) must enable AI and save the provider endpoint + API key in DB. If AI is disabled, bot should reply: `AI chat is disabled. Contact an admin to enable it.`
+- When enabled, the bot must respond to:
+  - Mentions (ping): if message mentions the bot and contains a question, forward to AI and respond in-channel.
+  - `/ask` slash command or `!ask` prefix command.
+- Add a short-term conversation memory (last N messages per channel) to maintain context for a short time.
+- `!teach "trigger" => "response"`:
+  - Allowed roles: owner/admin by default (configurable).
+  - Store trigger-response pairs in DB.
+  - When a new message or ticket content exactly matches a trigger (or fuzzy match if configured), return the stored response **before** calling external AI.
+  - Admin commands: `!teach list`, `!teach remove <id>`.
+- Add rate-limiting and caching of identical prompts to avoid abuse and API overuse.
+
+---
+
+## 9 — Acceptance tests (must pass)
+- `!ticketpanel` shows the embed + dropdown (no emoji).
+- Selecting option opens modal; modal submission creates ticket in correct category and proper channel name.
+- Ticket embed contains reason in code block and Roblox thumbnail (if linked).
+- Claim edits embed with `> This ticket has been claimed by @user` and does not send extra replies.
+- Closing opens modal, posts transcript to `1420538005936013403`, and archives/deletes channel per config.
+- Counting in `1431428103674138634` reacts with ✅ on correct numbers, enforces cooldown, and handles 5 mistakes behaviour.
+- AI responds to mentions and `/ask` when `/aisetup` enabled and `/aisetup` toggles service on/off.
+- `!teach` stores and returns taught responses properly.
+- No “This interaction failed” messages during panel/select/modal workflows.
+
+---
+
+## 10 — Implementation notes for Replit AI
+- Use robust DB transactions or locks during ticket create/claim/close flows to prevent double tickets and race conditions.
+- Use clear customIds for components: `ticket_select_<guildId>`, `ticket_modal_<guildId>_<userId>`, `ticket_claim_<channelId>`, `ticket_close_<channelId>`.
+- Validate and sanitize all user input before storage.
+- If any configured category/role/channel ID is invalid, `/config` should give a helpful error and not save invalid value.
+- Provide a short deploy report listing what was changed and any remaining warnings.
+
+---
+
+Paste this entire block into Replit AI and instruct it to **apply changes, deploy to your host, and run the acceptance tests**. If any test fails, it should return logs and fix the issue.
+
+If you want, I can also produce a **one-paragraph short prompt** (condensed) for quick paste — tell me and I’ll compress it.
+::contentReference[oaicite:0]{index=0}

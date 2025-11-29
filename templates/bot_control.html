@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}Bot Control - Spiritual Battlegrounds{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>🤖 BOT CONTROL</h1>
+    <p>Start, stop, and manage the Discord bot operations</p>
+</div>
+
+<div id="alert-container" class="alert" style="display: none;"></div>
+
+<div class="card" style="margin-bottom: 2rem;">
+    <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem; color: #8a2be2;">Bot Status</h2>
+    <div style="text-align: center; padding: 2rem;">
+        <div style="font-size: 4rem; margin-bottom: 1rem;" id="status-icon">⏳</div>
+        <div style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;" id="status-text">Checking...</div>
+    </div>
+    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <button class="btn" onclick="startBot()" id="start-btn">Start Bot</button>
+        <button class="btn" onclick="stopBot()" id="stop-btn">Stop Bot</button>
+        <button class="btn" onclick="restartBot()" id="restart-btn">Restart Bot</button>
+    </div>
+</div>
+
+<div class="card">
+    <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem; color: #da70d6;">AI Operations Control</h2>
+    <div style="text-align: center; padding: 2rem;">
+        <div style="font-size: 4rem; margin-bottom: 1rem;" id="ai-ops-icon">⏳</div>
+        <div style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;" id="ai-ops-text">Checking...</div>
+        <p style="color: #aaa; margin-top: 1rem;">Control autonomous AI ticket handling and responses</p>
+    </div>
+    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <button class="btn" onclick="startAI()">Start AI Operations</button>
+        <button class="btn" onclick="stopAI()">Stop AI Operations</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+async function updateStatus() {
+    const res = await fetch('/status');
+    const data = await res.json();
+    
+    const icon = document.getElementById('status-icon');
+    const text = document.getElementById('status-text');
+    
+    if (data.bot_status === 'Online') {
+        icon.textContent = '✅';
+        text.textContent = 'Online';
+        text.style.color = '#51cf66';
+    } else {
+        icon.textContent = '❌';
+        text.textContent = 'Offline';
+        text.style.color = '#ff6b6b';
+    }
+    
+    const aiIcon = document.getElementById('ai-ops-icon');
+    const aiText = document.getElementById('ai-ops-text');
+    
+    if (data.ai_ops_enabled) {
+        aiIcon.textContent = '▶️';
+        aiText.textContent = 'Active';
+        aiText.style.color = '#51cf66';
+    } else {
+        aiIcon.textContent = '⏹️';
+        aiText.textContent = 'Stopped';
+        aiText.style.color = '#ff6b6b';
+    }
+}
+
+async function startBot() {
+    const res = await fetch('/start');
+    const data = await res.json();
+    showAlert('alert-container', data.message, data.success);
+    setTimeout(updateStatus, 2000);
+}
+
+async function stopBot() {
+    const res = await fetch('/stop');
+    const data = await res.json();
+    showAlert('alert-container', data.message, data.success);
+    setTimeout(updateStatus, 2000);
+}
+
+async function restartBot() {
+    const res = await fetch('/restart');
+    const data = await res.json();
+    showAlert('alert-container', data.message, data.success);
+    setTimeout(updateStatus, 3000);
+}
+
+async function startAI() {
+    try {
+        const res = await fetch('/ai/start', { method: 'POST' });
+        const data = await res.json();
+        showAlert('alert-container', data.message, data.success);
+        setTimeout(updateStatus, 1000);
+    } catch (error) {
+        showAlert('alert-container', 'Error starting AI operations', false);
+    }
+}
+
+async function stopAI() {
+    try {
+        const res = await fetch('/ai/stop', { method: 'POST' });
+        const data = await res.json();
+        showAlert('alert-container', data.message, data.success);
+        setTimeout(updateStatus, 1000);
+    } catch (error) {
+        showAlert('alert-container', 'Error stopping AI operations', false);
+    }
+}
+
+updateStatus();
+setInterval(updateStatus, 5000);
+{% endblock %}

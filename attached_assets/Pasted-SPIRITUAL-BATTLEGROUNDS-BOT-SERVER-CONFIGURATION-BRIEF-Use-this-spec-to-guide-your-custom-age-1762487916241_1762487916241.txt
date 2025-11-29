@@ -1,0 +1,173 @@
+SPIRITUAL BATTLEGROUNDS™: BOT & SERVER CONFIGURATION BRIEF
+
+Use this spec to guide your custom agent and Replit AI builds. All details are targeted for modular, scalable, and maintainable configuration—do not delete or modify anything unless instructed.
+
+Main Objectives
+Build a custom Bloxlink-style verification system, using API key: 454b00db-82ce-4c2e-b5ae-3f3a27b02e72
+
+Add two UI buttons in the channel for users:
+
+Verify (gray)
+
+Can’t Verify (blue)
+
+No button text; simple UI, aligned horizontally
+
+On pressing Can’t Verify, user is redirected to: support channel (id: 1389999965979283608)
+
+On Verify, bot performs Roblox-Discord account linking via Bloxlink API (see documentation for API call structure, access permissions, and error handling)
+
+Discord Server Essential Features and Recommended Bots
+Verification Bot (Custom, replaces Bloxlink for direct API integration)
+
+Moderation Bot (Dyno, Carl-bot, or Sapphire for mod logs, automod, anti-raid, warnings)
+
+Ticket System (Custom panel, open/close/config support, panel in #support)
+
+Role Management Bot (Self-assign roles, integration w/ Roblox groups)
+
+Activity/XP Bot (e.g., Arcane, Sapphire for leveling, activity tracking)
+
+Welcome Bot (Automated welcome DM and rules link upon joining)
+
+Invite Tracker Bot (Track invites for server growth stats)
+
+Server Configuration Tasks
+Channels & Roles Audit
+
+Review all channels (rules, welcome, important, information, content, voice, etc.) for purpose and permissions.
+
+Map each channel’s core function (rules, help, dev logs, staff, general, tickets, etc.)
+
+Set channel READ permissions for all, POST only for roles above Member in critical channels.
+
+Ensure bots have Manage Roles, Read Messages, Send Messages, Manage Webhooks, Manage Channels.
+
+Roles Needed
+
+Verified
+
+Staff / Moderator
+
+Admin
+
+Developer
+
+Contributor
+
+Support
+
+(Unverified if required for gating new users)
+
+Grant Verified upon successful Roblox verification.
+
+Assign custom panel to Support channel for tickets.
+
+Custom Ticket Panel Example
+
+text
+[TICKET PANEL]
+> Welcome to support. Click the button below to open a ticket.
+[Open Ticket] [Close Ticket]
+Panel auto-closes ticket after inactivity.
+Panel logs all tickets to #panel-logs with user and problem.
+Config variables:
+   - support_channel_id = 1389999965979283608
+   - ticket_log_channel_id = (specify)
+   - inactivity_timeout = 30 min
+Verification Logic Flow
+User joins server
+
+Bot sends verification prompt with gray Verify and blue Can’t Verify buttons (no labels)
+
+On verify:
+
+Trigger webhook/api call to Bloxlink (use above API key)
+
+If success → Grant Verified, send success DM
+
+If fail → Optionally provide error, option for Can’t Verify
+
+On Can’t Verify:
+
+Move user to Support channel automatically
+
+Best Practices
+Follow security/permission discipline for bots
+
+Log all actions (verify, tickets, mod events)
+
+Use modular config for API keys, channels, roles, timeouts
+
+Regular bug testing on button, permissions, error re-routing
+
+Sample Professional Rules Section for Reference
+text
+> Staff members have the final say in any situation. Any action, even if not listed as a rule, may still result in moderation if deemed against server/community standards.
+>
+> Punishment Structure:
+> - Warning 1: Verbal reminder
+> - Warning 2: 3-minute mute
+> - Warning 3: 15-minute mute
+> - Warning 4: 1-hour mute
+> - Warning 5: 5-hour mute
+> - Warning 6: 1-day mute
+> - Warning 7: 1-week mute
+> - Warning 8: Permanent ban
+>
+> Using loopholes or bypassing rules will be handled with extended moderation.
+>
+> If you have questions, use the Support channel.
+Configuration Block (for agent/dev use)
+text
+verification_api_key = "454b00db-82ce-4c2e-b5ae-3f3a27b02e72"
+verify_button_color = "gray"
+cant_verify_button_color = "blue"
+support_channel_id = "1389999965979283608"
+ticket_panel_enabled = true
+activity_bot_enabled = true
+moderation_bot_enabled = true
+invite_tracker_enabled = true
+custom_roles = ["Verified", "Staff", "Admin", "Developer", "Contributor", "Support"]
+Additional Notes
+No emojis (per request)
+
+Use Discord markdown (>, code blocks, headers, horizontal lines, etc.)
+
+All roles, channels, features must be mapped and tested before release.
+
+No bugs or issues tolerated — test every feature.
+
+Organize all scripts and configs for easy deployment in Replit/agent.
+
+Copy this to your agent/replit config to begin. Expand as needed per new feature requests.
+
+first enable agent on perplexity and check and then rewrite it for whats needed so first check
+
+I've completed a comprehensive audit of your Spiritual Battlegrounds Discord server and created a full bot specification document.
+
+KEY FINDINGS FROM SERVER AUDIT
+Server Status:​
+
+728 members total
+
+14 channels across 5 categories
+
+11 verified bots already installed (Bloxlink, Arcane, Dyno, Carl-bot, Sapphire, etc.)
+
+10+ established roles with clear hierarchy
+
+Rules channel with warning punishment structure (8-tier system)
+
+Support channel confirmed: 1389999965979283608
+
+WHAT YOUR SERVER NEEDS
+Critical Systems:
+
+Custom Bloxlink Verification — Replace/supplement existing with your API key
+
+Ticket Support Panel — Private ticket creation system in support channel
+
+Auto-Moderation — Spam, profanity, invite filtering
+
+Role-Based Permissions — Automated verified role assignment

@@ -1,0 +1,43 @@
+~/workspace$ ^[[200~git remote add origin https://github.com/RoModerate/DiscordBotManager-1.git
+git remote add origin https://github.com/RoModerate/DiscordBotManager-1.gitbash: git: command not found
+~/workspace$ git branch -M main
+~/workspace$ git push -u origin main~
+fatal: invalid refspec 'main~'
+~/workspace$ git remote add origin https://github.com/RoModerate/DiscordBotManager-1.git
+git branch -M main
+git push -u origin main
+error: remote origin already exists.
+Enumerating objects: 809, done.
+Counting objects: 100% (809/809), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (800/800), done.
+Writing objects: 100% (809/809), 2.44 MiB | 7.69 MiB/s, done.
+Total 809 (delta 543), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (543/543), done.
+remote: error: GH013: Repository rule violations found for refs/heads/main.
+remote: 
+remote: - GITHUB PUSH PROTECTION
+remote:   —————————————————————————————————————————
+remote:     Resolve the following violations before pushing again
+remote: 
+remote:     - Push cannot contain secrets
+remote: 
+remote:     
+remote:      (?) Learn how to resolve a blocked push
+remote:      https://docs.github.com/code-security/secret-scanning/working-with-secret-scanning-and-push-protection/working-with-push-protection-from-the-command-line#resolving-a-blocked-push
+remote:     
+remote:     
+remote:       —— Discord Bot Token —————————————————————————————————
+remote:        locations:
+remote:          - commit: b35ded39fb84b89527c868cff0a968cacadf33ab
+remote:            path: .env.example:1
+remote:     
+remote:        (?) To push, remove secret from commit(s) or follow this URL to allow the secret.
+remote:        https://github.com/RoModerate/DiscordBotManager-1/security/secret-scanning/unblock-secret/3688YR355lFtNiCZIUlspeAWojK
+remote:     
+remote: 
+remote: 
+To https://github.com/RoModerate/DiscordBotManager-1
+ ! [remote rejected] main -> main (push declined due to repository rule violations)
+error: failed to push some refs to 'https://github.com/RoModerate/DiscordBotManager-1'
+~/workspace$ 

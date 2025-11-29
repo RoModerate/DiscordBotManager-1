@@ -1,0 +1,141 @@
+BOT REWRITE INSTRUCTIONS
+🎫 Ticket System
+
+Command: !ticketpanel
+
+Goal:
+Send an embed-based ticket panel with a select menu (dropdown).
+Each option should include an emoji and open a ticket in its respective category.
+
+📜 Panel Embed Example
+
+Embed Content:
+
+**Notice:**
+✦ If this is your first time using our ticket system, please read the ticket guide below.
+
+✦ These guides will help you understand the process and following them will significantly speed up the handling of your ticket.
+
+**Allowed Tickets:**
+✦ User Reports  
+✦ Staff Reports  
+✦ Bug Reports  
+✦ Warning Appeals  
+✦ Content Creator Requests  
+✦ Other Server-Related Inquiries
+
+**Disallowed Tickets:**
+✦ General Game Questions  
+✦ Suggestions  
+✦ Role Requests (Staff, Tester, Helper, etc.)
+
+🧩 Select Menu Setup
+
+The select menu should appear below the embed and contain these options:
+
+Label	Emoji	Description	Category ID
+🎟️ Support Ticket	🎟️	Get help from our staff team	1436498409153626213
+🧑‍🎨 Request CC	🧑‍🎨	Apply or request content creator role	1436498445216256031
+⚠️ Report Player	⚠️	Report a player for breaking rules	1436498495153635512
+🚫 Warning Appeal	🚫	Appeal a received warning	1436498528544227428
+
+✅ When a user selects an option → the bot should create a ticket channel under the correct category.
+
+🧷 Ticket Channel Format
+
+Channel name format:
+《🔴》・username (when not claimed)
+《🟢》・username (when claimed)
+
+Only the ticket creator and ticket managers should see the channel.
+
+🧾 Ticket Embed (Inside Channel)
+
+When ticket is created:
+Embed at the top of the ticket should look like this:
+
+> Ticket opened by @user  
+> Reason:
+
+
+Then show the user’s provided reason in a code block:
+
+Reason: example text here
+
+
+Extra details:
+
+Add user’s Roblox avatar as a thumbnail on the embed.
+
+Add their Roblox username (clickable link) in the embed footer or a separate field.
+
+Example:
+
+Roblox Profile: Click Here
+
+👤 Claim System
+
+When a staff member claims a ticket:
+
+The bot should not reply with text.
+
+Instead, edit the top embed to add:
+
+> This ticket has been claimed by @user
+
+
+Change the channel name to show “🟢”.
+
+❌ Close Ticket System
+
+Fix the “This is not a valid ticket channel.” issue — closing must work in all valid ticket channels.
+
+When a ticket is closed:
+
+Send the transcript automatically to 1420538005936013403.
+
+Include the staff name and user in the transcript header.
+
+🤖 AI Chat System
+
+Fix the issue where it says:
+AI chat is currently disabled.
+
+Make the AI respond normally when pinged (e.g., when someone mentions the bot).
+
+Ensure /aisetup actually enables the AI and saves the config.
+
+Add short-term memory so it remembers the last few messages in the conversation.
+
+The AI should also work in ticket channels if allowed.
+
+🧱 Level System Fix
+
+Currently stuck at Level 3 — fix progression.
+
+Levels should increase as users send messages.
+
+Example rule:
+
+~20 messages → Level 1
+
+~40 messages → Level 2
+
+~60 messages → Level 3, and so on.
+
+When a user levels up, send a message to channel ID 1409304816718709006:
+
+@user has reached Level {X}! Keep chatting to earn more levels!
+
+
+Don’t use embeds for level-up messages — keep it simple text.
+
+⚙️ General Requirements
+
+All embeds and messages must be clean, consistent, and use Discord markdown.
+
+No duplicate messages or spam replies.
+
+Bot should send embeds only when necessary.
+
+Everything should function bug-free and optimized for performance.

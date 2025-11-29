@@ -1,0 +1,175 @@
+1. Command Duplication & Performance Fix
+
+Fix the issue where commands (like ! or /) cause duplicate responses. The bot should respond only once to each valid command.
+
+Add a cooldown system (e.g., 2 seconds per user per command) to prevent spam.
+
+Ensure that all command prefixes are unified — use both:
+
+Dot prefix (e.g. .say, .purge, .config)
+
+Slash commands (e.g. /say, /config, /giveaway)
+
+Commands should be case-insensitive (e.g., .Say or .say both work).
+
+2. Ticket System (Complete Redesign)
+
+Goal: Create a clean, professional ticket system inside a single category where all tickets open.
+
+Category: Main Ticket Section
+Channel IDs:
+
+Claim Channel → 1409304816718709006
+
+Staff Ping ID → 1383270362707656774
+
+Ticket Setup Flow:
+
+When a user types /ticket or .ticket, open an embedded UI panel with the following header message:
+
+Notice:
+If this is your first time using our ticket system, please read the guide below.
+
+These guides will help you understand the process. Following them will help us handle your request faster and more effectively.
+
+Allowed Tickets:
+- User Reports
+- Staff Reports
+- Bug Reports
+- Warning Appeals
+- Content Creator Requests
+- Other Server-Related Inquiries
+
+Disallowed Tickets:
+- General Game Questions
+- Suggestions
+- Role Requests (Staff, Tester, Helper, etc.)
+
+
+Below the message, create a dropdown (selection menu) with the following options:
+
+Support Ticket
+
+Request CC
+
+Report a Member
+
+Warning Appeal
+
+When a user selects an option:
+
+A new ticket channel is created under the ticket category.
+
+The channel name format:
+
+ticket-s-username → Support
+
+ticket-r-username → Report
+
+ticket-w-username → Warning
+
+ticket-cc-username → Content Creator Request
+
+Send a message in that new channel tagging staff (<@1383270362707656774>) with:
+
+Ticket created by @user.
+Please provide a detailed reason for opening this ticket.
+
+
+Add a text input box for the user to type their reason.
+
+Add a Claim Button for staff to mark tickets as “claimed.”
+
+When claimed, show a green check beside the ticket name.
+
+If unclaimed, show a red X beside the name.
+
+Only the staff who clicked “Claim” can mark it as “Resolved.”
+
+Once closed, tickets should auto-archive after 24 hours or when the staff resolves it.
+
+3. Verification System
+
+Fix the /setupverify command (currently broken).
+
+Channel ID for verification: 1423669807521202247
+
+The system should allow the server owner to run /config verify and set:
+
+The verification channel
+
+The verified role
+
+Optional welcome message
+
+When a user verifies, send a DM confirming:
+"Verification complete! You now have access to the server."
+
+4. Leveling & XP System
+
+Add a leveling system that tracks user activity in text channels.
+
+When a user levels up, send this message:
+@user is now level {level}! Keep chatting to earn more levels.
+
+Include cooldown to prevent message spam farming.
+
+5. Utility Commands (Dot + Slash Versions)
+
+Add the following commands with both . and / versions:
+
+Command	Description
+.say / /say	Makes the bot repeat a user’s message.
+.purge / /purge	Deletes a selected number of messages.
+.config / /config	Opens configuration panel for admins to set up IDs, logs, etc.
+.dm / /dm	Sends a DM to a chosen user.
+.giveaway / /giveaway	Creates a giveaway with customizable time, prize, and winner count.
+
+Make /config interactive with embeds and select menus (for server setup, verification, logging channels, etc.).
+
+6. Counting System (Fun Game System)
+
+Category ID: 1431428103674138634
+Goal: Users must count correctly up to 5000.
+
+Rules:
+
+Each user must wait 5 seconds between numbers.
+
+If a user types too early, reply with:
+Please wait before typing again.
+
+If they type the wrong number, they lose 1 of 5 chances.
+
+After 5 mistakes, they are locked from counting for 1 hour.
+
+When a user types the correct number, add a ✅ reaction.
+
+If the count reaches 5000, send a special message:
+"Congratulations! The count reached 5000!"
+
+7. Welcome System
+
+Category ID: 1409299795318804612
+When a new user joins, send:
+Welcome @user to (server name)!
+Add optional custom messages or random greetings for variety.
+
+8. Bot Presence & Design
+
+Set status to Do Not Disturb with custom message:
+"Managing RoModerate Systems"
+
+Use clean embedded messages for all system responses.
+
+Include timestamps and consistent color themes for embeds.
+
+Ensure all user avatars in embeds display properly using interaction.user.displayAvatarURL()
+
+9. Future Expansion (Optional Ideas)
+
+Add a dashboard link in /config so users can manage settings from the website version.
+
+Create an admin-only channel for moderation logs and ticket actions.
+
+Add database caching so tickets, verification states, and levels persist across restarts.

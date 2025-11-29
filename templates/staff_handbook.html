@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Staff Handbook - Spiritual Battlegrounds{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>📚 Staff Handbook</h1>
+    <p>Guidelines, procedures, and important information for staff members</p>
+</div>
+
+<div class="card" style="margin-bottom: 2rem;">
+    <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem; color: #8a2be2;">Server Rules & Guidelines</h2>
+    <div style="color: #b0b0b0; line-height: 1.8;">
+        <h3 style="color: #da70d6; margin-top: 1.5rem; margin-bottom: 0.8rem;">1. General Conduct</h3>
+        <ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+            <li>Always maintain professionalism when interacting with members</li>
+            <li>Be respectful and patient with all community members</li>
+            <li>Lead by example and follow all server rules</li>
+        </ul>
+
+        <h3 style="color: #da70d6; margin-top: 1.5rem; margin-bottom: 0.8rem;">2. Ticket Management</h3>
+        <ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+            <li>Respond to tickets within 30 minutes when available</li>
+            <li>Always claim a ticket before responding</li>
+            <li>Use the AI assistant to help with common questions</li>
+            <li>Type "STOP" to pause AI and "START" to resume if needed</li>
+            <li>Escalate complex issues to senior staff</li>
+        </ul>
+
+        <h3 style="color: #da70d6; margin-top: 1.5rem; margin-bottom: 0.8rem;">3. Moderation Guidelines</h3>
+        <ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+            <li>Issue warnings before taking harsher actions</li>
+            <li>Document all moderation actions in the appropriate channel</li>
+            <li>Consult with other staff for serious violations</li>
+        </ul>
+
+        <h3 style="color: #da70d6; margin-top: 1.5rem; margin-bottom: 0.8rem;">4. AI System Usage</h3>
+        <ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+            <li>The AI learns from all server conversations</li>
+            <li>Staff can teach the AI specific responses using the /teach command</li>
+            <li>AI operations can be controlled via the dashboard</li>
+            <li>Review AI responses periodically for accuracy</li>
+        </ul>
+    </div>
+</div>
+
+<div class="card">
+    <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem; color: #8a2be2;">Quick Reference</h2>
+    <div style="display: grid; gap: 1rem;">
+        <div style="padding: 1rem; background: rgba(138, 43, 226, 0.1); border-radius: 8px; border-left: 4px solid #8a2be2;">
+            <h4 style="color: #da70d6; margin-bottom: 0.5rem;">Emergency Contact</h4>
+            <p style="color: #b0b0b0;">For critical issues, contact @Server Owner immediately</p>
+        </div>
+
+        <div style="padding: 1rem; background: rgba(138, 43, 226, 0.1); border-radius: 8px; border-left: 4px solid #da70d6;">
+            <h4 style="color: #da70d6; margin-bottom: 0.5rem;">Staff Channels</h4>
+            <p style="color: #b0b0b0;">#staff-chat for general discussion | #staff-logs for actions</p>
+        </div>
+
+        <div style="padding: 1rem; background: rgba(138, 43, 226, 0.1); border-radius: 8px; border-left: 4px solid #8a2be2;">
+            <h4 style="color: #da70d6; margin-bottom: 0.5rem;">Dashboard Access</h4>
+            <p style="color: #b0b0b0;">Use this dashboard to control the bot and manage AI operations</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

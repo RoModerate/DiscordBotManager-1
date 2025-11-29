@@ -1,0 +1,298 @@
+This setup defines the full structure, rules, and functionality for the Spiritual Battlegrounds Discord AI.
+The AI must handle moderation, shifts, staff management, ticket systems, and memory logic with accuracy, professionalism, and no unnecessary replies or embeds.
+
+1. Shift Tracking System
+shift start
+
+Command:
+
+shift start [duration]
+
+
+Purpose: Starts a moderation shift for a staff member.
+
+When used:
+
+The AI logs who started the shift and when it began.
+
+It tracks the shift duration and who is currently on duty.
+
+The bot confirms the shift start with a clean success message (no random text).
+
+Example Usage:
+
+!shift start 2h
+
+
+Shift Start Log Channel:
+
+<#1436895113820373144>
+
+shift end
+
+Command:
+
+shift end
+
+
+Purpose: Ends the current shift and logs total shift time.
+
+When used:
+
+The AI calculates how long the shift lasted.
+
+It sends a summary with clear time stamps and total duration.
+
+The log is sent to the Shift End Log Channel with no embed.
+
+Example Usage:
+
+!shift end
+
+
+Shift End Log Channel:
+
+<#1436895129615995060>
+
+Example Log Entry:
+
+Shift Ended:
+Moderator: @Username
+Started: 12:45 PM
+Ended: 3:45 PM
+Duration: 3 Hours
+Status: Completed Successfully
+
+2. Staff Management System
+promotion
+
+Command:
+
+promotion [@user] [new rank]
+
+
+Purpose: Promotes a staff member to a higher role.
+Only Owners, Co-Owners, Managers, or High Staff can use this.
+
+Example Usage:
+
+!promotion @SpiritualHelper Moderator
+
+
+When used:
+
+Logs the promotion to the promotion channel.
+
+Tags both the issuer and the promoted staff.
+
+Adds a timestamp for record-keeping.
+
+Promotion Log Channel:
+
+<#1436895147206901810>
+
+infraction
+
+Command:
+
+infraction [@user] [reason]
+
+
+Purpose: Records a rule violation or staff infraction.
+Works for both members and staff.
+
+Example Usage:
+
+!infraction @Member Misuse of mod commands
+
+
+Infraction Log Channel:
+
+<#1436895168367169637>
+
+Example Log Entry:
+
+Staff Infraction Logged
+User: @Member
+Reason: Misuse of mod commands
+Date: November 8, 2025
+Issued By: @ManagerName
+
+3. Ticket System (Full Fix + Functionality)
+
+Ticket Categories (Plain Text Only):
+
+Support Ticket → 1436498409153626213
+
+Request CC → 1436498445216256031
+
+Report a Member → 1436498495153635512
+
+Warning Appeal → 1436498528544227428
+
+Ticket Rules:
+
+No emojis (❌🔒⚙️ etc.) in ticket messages.
+
+The bot must use the actual username of the person opening the ticket, not @unknown-user.
+
+No embeds for these four categories — use plain text only.
+
+The AI should read and understand the reason for the ticket and respond accordingly.
+
+Ticket Behavior:
+
+When a user opens a ticket:
+
+The AI greets them and starts responding based on the category.
+
+The AI provides short, direct, professional responses (plain text only).
+
+The AI listens for commands:
+
+If the user says STOP, the AI stops responding.
+
+If the user says START, it resumes exactly where it left off.
+
+The AI must retain conversation context until the ticket is closed.
+
+Ticket Claiming and Closing:
+
+When a staff member claims a ticket:
+
+This ticket has been claimed by @StaffMember
+
+
+When closing a ticket:
+
+The bot asks for a closing reason.
+
+After receiving it, the bot logs the full transcript in:
+
+Transcript Channel: <#1420538005936013403>
+
+No embeds, no emojis — plain readable text only.
+
+"Already Have Ticket" Bug Fix:
+
+The AI must verify if a user actually has an open ticket.
+If they don’t, it must allow them to create a new one instead of sending the error:
+
+You already have an open Support Ticket.
+
+Select Menu Emojis (For Ticket Selection Only):
+
+Support Ticket → <:7452jijiquestion:1412831191098327070>
+Request CC! → <:7502kintaimmensementalfortitude:1412831174752997386>
+Report a Member! → <:82674shrimpalerted:1412831155404800061>
+Warning Appeal → ⚠️
+
+These emojis should only appear in the select menu titles, not in message text.
+
+4. AI Training and Memory
+
+The AI must:
+
+Memorize every channel, role, and category in the server.
+
+Store user roles, Roblox usernames (via Bloxlink), and channel IDs.
+
+Keep data persistent even after restarts.
+
+Respond with real, live data from the server (no guessing or fake info).
+
+Always answer accurately — for example, if asked how many channels exist, it must read and return the exact count.
+
+Teach Command:
+
+!teach [question] [response]
+
+
+When used, the AI permanently stores the new response and remembers it across all sessions.
+
+Forget Command:
+
+!forget [question]
+
+
+Deletes a taught response.
+
+Help Command:
+
+!help
+
+
+Lists all available commands:
+
+!shift start
+!shift end
+!promotion
+!infraction
+!teach
+!forget
+!ticket
+!close
+!claim
+!help
+
+5. Category-Based AI Response Logic
+
+Support Ticket (1436498409153626213):
+
+"Hello! Please describe the issue you’re facing in detail so I can assist you as quickly as possible."
+
+Request CC (1436498445216256031):
+
+"Please provide your custom command idea, the purpose, and how you’d like it to function."
+
+Report a Member (1436498495153635512):
+
+"Please provide the player’s username, what happened, and any proof (like a screenshot or clip)."
+
+Warning Appeal (1436498528544227428):
+
+"Please provide the warning you’re appealing, your reason, and any proof supporting your appeal."
+
+All responses must be plain text, clear, and professional — no embeds, no formatting errors.
+
+6. AI Behavior Fix
+
+If the AI responds with random or unrelated messages like:
+
+“Good morning, Spiritual Battlegrounds crew!”
+
+This must be disabled.
+The AI should only respond with professional moderation or support actions related to the command used.
+No greetings, filler, or unrelated chatter.
+
+7. Future Integration
+
+If possible, the AI should:
+
+Build and connect to a web dashboard for server management.
+
+The web should include:
+
+Ticket overview and transcripts
+
+Staff shift tracking dashboard
+
+Promotion and infraction logs
+
+Editable AI settings and memory
+
+This dashboard should sync directly with the Discord data for accuracy.
+
+Final Notes:
+
+No embeds for ticket responses.
+
+No emojis except for the select menu ones above.
+
+AI must always stay accurate, fast, and memory-capable.
+
+Every command must function smoothly with zero bugs.
+
+All new commands must appear in !help.
+
+The AI should continuously learn server layout, roles, and new updates automatically.

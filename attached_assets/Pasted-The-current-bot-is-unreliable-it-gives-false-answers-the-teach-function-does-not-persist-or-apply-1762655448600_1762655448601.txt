@@ -1,0 +1,315 @@
+The current bot is unreliable: it gives false answers, the !teach function does not persist or apply taught knowledge correctly, it cannot read server structure, and many moderation features are missing or poorly formatted. Fix everything listed below and deliver a stable, professional bot and matching web dashboard.
+
+Deliverables (high level)
+
+Make the AI reliably read and index the entire Discord server (channels, categories, roles, channel IDs, pinned messages).
+
+Fully fix the !teach//teach system so taught responses persist in the database and are used as authoritative answers (taught responses take priority over generative replies).
+
+Make ticketing, shift, promotion, and infraction workflows robust and well-formatted (embedded where requested).
+
+Remove /staffannounce command entirely.
+
+Add bugreport and modlog commands and a built-in audit log that records moderator actions, role changes, ticket claims/closures, and other admin events.
+
+Build a professional web dashboard styled to match the Dandadan-inspired aesthetic for staff (home, tickets, shift logs, promotion/infraction logs, audit logs, AI config).
+
+Requirements & Behavior (detailed)
+1) Server indexing & live accuracy
+
+On startup and on demand, the bot must scan and store the current server structure in DB:
+
+All channels and their IDs, categories, pinned messages, permission overwrites.
+
+All roles and role IDs.
+
+All members with linked Roblox usernames via Bloxlink (if available).
+
+When asked questions like “how many channels are there” or “where is support,” the bot must read live data and answer exactly (no guessing).
+
+Maintain a nightly or scheduled re-sync to capture changes.
+
+2) !teach / /teach persistent learning
+
+!teach "trigger phrase" => "response" must:
+
+Save trigger/response pair to DB with metadata: who taught it, timestamp, visibility (global/guild).
+
+When a message matches a trigger (exact match or configurable fuzzy match), the bot returns the taught response instead of generic AI generation.
+
+Include admin moderation tools: !teach list, !teach remove <id>, !teach export.
+
+Teaching must be immediate and persist across restarts; no “repeats my question” behavior.
+
+Provide confidence / precedence rules: taught responses > cached responses > LLM fallback.
+
+All !teach actions must be logged to modlog/audit channel.
+
+3) AI behavior & conversation context
+
+The AI should not produce filler greetings or unrelated text; it should respond only when invoked or when handling tickets/commands.
+
+Add short-term conversation memory per ticket channel (store last N messages) so it does not lose context mid-conversation.
+
+Support control keywords inside tickets:
+
+STOP — AI stops responding to that ticket (until resumed).
+
+START — AI resumes from where it left off.
+
+AI must respond to ticket content in plain text (no embeds) unless specifically requested.
+
+/aisetup must enable/disable AI and set provider API key/endpoint in DB.
+
+4) Ticket system fixes & behavior
+
+Ticket categories (plain text output only for these categories; no embeds unless staff UX asks):
+
+Support
+
+Request CC
+
+Report a Member
+
+Warning Appeal
+
+Ticket creation:
+
+Use select menu with emoji labels in the menu title only (the specified custom emojis).
+
+After select, open a modal to collect a reason; the modal result is posted as the first plain text message in ticket channel.
+
+The ticket channel should be named using a clear format (e.g., RED-username for unclaimed, GREEN-username for claimed) — no “@unknown-user”.
+
+Ticket AI handling:
+
+AI must analyze the reason and respond with appropriate steps (category-specific prompts are in the knowledge base).
+
+If the issue requires human assistance, AI should ping the staff role configured in /config.
+
+When staff claims, the bot must post a plain text line: This ticket has been claimed by @StaffMember and update status (no additional replies).
+
+Closing a ticket:
+
+Staff clicks Close (or uses !close) → modal asks for close reason → transcript is generated and posted to transcript channel and stored in DB.
+
+Transcripts must include timestamped message history, ticket type, creator, claimedBy, closedBy.
+
+Fix the “You already have an open Support Ticket” bug: bot must check DB/state to verify whether the user actually has an active ticket.
+
+5) Shift tracking (embedded logs)
+
+Commands:
+
+shift start [duration] — starts shift; saves start time and expected duration; AI confirms.
+
+shift end — ends shift for the caller; calculates total time, sends a summary to shift logs.
+
+Logs should be posted to the specified channels and can be embedded with a clean, professional layout. Include optional details: tasks performed, number of tickets handled, notes.
+
+AI should be able to start and end shifts on the moderator’s behalf (via /shift start and /shift end), and must prevent duplicate/overlapping shifts per user.
+
+6) Promotions & infractions
+
+promotion [@user] [new rank] — only high-level roles allowed; logs in promotion channel with who promoted and timestamp.
+
+infraction [@user] [reason] — logs infractions to infraction channel, records issuer, reason, timestamp; optionally increments strike count.
+
+Provide a /modlog command to view recent moderation actions, and a web UI view.
+
+7) Modlog / Audit log / Bug report
+
+Implement modlog and auditlog:
+
+Record key actions: role changes, bans, kicks, mutes, promotions, infractions, ticket claims/closures, !teach additions/removals.
+
+Provide commands: /modlog [user|action|limit] to fetch recent logs.
+
+bugreport [description] command that:
+
+Accepts a report and posts it to bug channel with reporter info, timestamp, and optional attachments.
+
+Optionally allow reporter to mark priority.
+
+8) Command presentation & help
+
+Present !help with all active commands, including newly added ones, with short descriptions. Keep it clean, grouped by category (Moderation, Tickets, AI, Staff Tools).
+
+All owner/admin config commands available via /config with clear pages for Ticket IDs, Staff Roles, Channels, AI provider, and permissions mapping.
+
+9) Web dashboard
+
+Build a professional web dashboard matching the Dandadan-inspired aesthetic:
+
+Home overview (server stats)
+
+Ticket manager (list, open/close, view transcripts)
+
+Shift dashboard (active shifts, history)
+
+Promotion & infraction logs
+
+AI settings & !teach editor
+
+Role/permission config
+
+Dashboard must use secure auth (Discord OAuth) and read/write to the same DB used by the bot.
+
+Acceptance criteria & tests
+
+Teach/learn: after !teach "X" => "Y", asking "X" returns "Y" (persist across restarts).
+
+Server info: asking “how many channels” returns exact live count.
+
+Tickets: create → modal → new channel → AI replies contextually → claim → This ticket has been claimed by @Staff → close produces transcript at transcript channel.
+
+Shift: start → end → accurate duration in log channel.
+
+Promotions/infractions: only permitted roles can run commands; logs posted.
+
+Audit log: stores all critical events and can be queried via /modlog.
+
+Web Dashboard: displays ticket list, transcripts, shift logs, promotion/infraction entries, and allows save/modify config.
+
+Implementation notes for Replit AI / dev
+
+Use a persistent DB (Postgres / Supabase / Neon / MongoDB Atlas) for taught pairs, tickets, shifts, and logs.
+
+Use Discord interactions (select menus + modals + component.deferUpdate/respond) with proper defers to avoid “This interaction failed.”
+
+Use locking/transactions to avoid race conditions when creating/claiming tickets or starting shifts.
+
+Integrate Bloxlink API where available to map Discord users to Roblox usernames.
+
+Provide fallback behavior and graceful error messages if an external AI provider or Bloxlink is down.
+
+Provide a migration/import script to import existing taught responses or logs if needed.
+
+Make these changes now, deploy to staging, run the acceptance tests above, and return a short report of actions taken and any remaining edge cases. If any test fails, provide logs and an estimated fix.
+
+Overview
+
+This AI system is built to manage staff operations, moderation, and shift tracking for the Spiritual Battlegrounds Roblox server.
+It should act smartly, respond clearly, and function smoothly without bugs or repeated errors.
+
+⚙️ Core Commands
+1. shift start
+Starts a moderation shift.
+
+
+Usage:
+When a moderator starts their shift, they use this command and specify how long they’ll be active (optional).
+The AI logs the start time in the Shift Logs Channel (1436895113820373144) and confirms the shift start.
+
+2. shift end
+Ends the current shift.
+
+
+When the moderator ends their shift, the AI automatically:
+
+Logs the total duration of the shift.
+
+Notes the staff member’s name and ID.
+
+Sends the log to Shift Logs (1436895129615995060) with detailed info such as duration, start-end time, and date.
+
+These logs must look professional — use proper markdown (**bold**, > blockquotes, `code`) and avoid emojis.
+
+🧾 Promotion & Infraction
+3. promotion
+Promotes a staff member to a higher rank.
+
+
+Only high-ranking roles (like Admins or Community Managers) can execute this command.
+Promotion announcements go to Channel 1436895147206901810 with a formal embedded layout showing:
+
+Promoted user
+
+New role
+
+Promoter name
+
+Date
+
+4. infraction
+Issues or logs a disciplinary infraction.
+
+
+Used to record staff or player violations.
+Logs go to Channel 1436895168367169637, showing:
+
+User warned
+
+Reason
+
+Staff who issued it
+
+Total warning count (if applicable)
+
+🚨 New Command Suggestion
+5. force warn
+Allows higher-ranked staff (Community Manager and above) to warn users above their own rank.
+
+
+This prevents power abuse but allows necessary discipline for all ranks.
+For example:
+Only roles Community Manager+ can use force warn on Admins or similar-level staff.
+It should log in the same format as a normal warning, clearly noting:
+
+“This was a forced warning executed by a high-ranking staff member.”
+
+🧠 Safety & Behavior Rules for the AI
+
+The AI must not respond to normal user commands unless it’s directly relevant to moderation or tickets.
+
+The AI must always use the prefix before executing a command (e.g., !warn @User reason).
+
+This prevents accidental punishments when staff joke about commands.
+
+The AI must not respond with random or generic information.
+When taught something, it should store it accurately and use that information in future answers.
+Example:
+
+If taught “Spiritual Battlegrounds is a Dandadan-inspired Roblox game,”
+then when asked “what’s this server about,” it should respond with that exact learned info — not a random AI guess.
+
+🧰 Other Needed Commands
+bug report
+
+Logs bugs reported by staff or users into a Bug Reports channel.
+The report must include:
+
+Who reported
+
+Description
+
+Date/time
+
+audit log
+
+Acts like a built-in audit system — it tracks:
+
+Message deletions
+
+Role changes
+
+Channel edits
+
+Command executions
+and logs them in a hidden Admin Log channel for full transparency.
+
+🕸 Web Dashboard
+
+The Replit web interface should have:
+
+A Home Page with an overview of server status, online staff, and shift stats.
+
+A Staff Panel with:
+
+Shift start/end buttons.
+
+Promotion, infraction, and force-warn forms.
+
+A Logs Page for viewing moderation, warnings, and bug reports.
+
+A Dandadan-inspired visual design — clean layout, minimalistic interface, dark gradient tones, and anime-like accent borders.

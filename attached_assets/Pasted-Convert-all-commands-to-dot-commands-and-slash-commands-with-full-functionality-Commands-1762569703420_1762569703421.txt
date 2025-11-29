@@ -1,0 +1,93 @@
+Convert all ! commands to dot commands (.) and slash commands (/) with full functionality.
+
+Commands like .setupverify, .ticketpanel, /config, .say, .purge, /giveaway must work without bugs.
+
+/config must allow the owner to configure:
+
+Who can use each command
+
+Which role has access
+
+Ticket categories and AI functionality
+
+Buttons: Next, Previous, Reload, Submit (all properly working, gray professional style)
+
+Counting system must work: messages increment levels properly, with a cooldown (5 sec) between messages, and mistakes reduce chances (5 chances).
+
+.setupverify must only have:
+
+Gray Verify button
+
+Blue Need Help button → redirects to support channel (1389999965979283608)
+
+On verify: DM user → > Verification Complete. You have successfully verified in @server
+
+Embed DM shows user’s Roblox name and icon
+
+Log the verification in 1411710143598690404
+
+2. Ticket System
+
+!ticketpanel must:
+
+Use select menu (no buttons)
+
+Categories:
+
+Support ticket → 1436498409153626213
+
+Request CC → 1436498445216256031
+
+Report player → 1436498495153635512
+
+Warning appeal → 1436498528544227428
+
+Channel name: 《🟢》 @user if claimed, 《🔴》 @user if not claimed
+
+When opened: ask reason in a UI and log it in the ticket
+
+Embed ticket includes user’s Roblox icon and clickable link
+
+Staff and user are pinged when ticket is created
+
+Transcript is sent automatically to 1420538005936013403 when ticket is closed
+
+Close button must prompt for reason and send transcript
+
+Make the design professional with Discord markdown (>, **, ), no emojis in text
+
+3. AI Functionality
+
+AI should respond to tickets depending on the issue:
+
+Can handle ticket questions automatically
+
+Ask if ticket should be closed when resolved
+
+STOP → AI stops responding
+
+START → AI resumes from where it left
+
+/aisetup must activate AI
+
+AI should not respond in embeds, respond as normal text in the ticket
+
+Support /teach and !teach commands so users can teach the AI:
+
+Example: !teach @bot claim ticket automatically → AI learns and performs that action
+
+4. General Fixes
+
+Fix duplicate messages for verification, level-up, and other commands
+
+Make sure all bot commands (dot and slash) work smoothly
+
+Fix counting system to increment correctly and display level progression
+
+Fix ticket select menu so it works consistently
+
+Ensure AI and ticket system integrate perfectly, no errors
+
+Make bot go Do Not Disturb (DND) to reduce unnecessary notifications
+
+Make the whole system stable and bug-free, professional design with proper markdowns

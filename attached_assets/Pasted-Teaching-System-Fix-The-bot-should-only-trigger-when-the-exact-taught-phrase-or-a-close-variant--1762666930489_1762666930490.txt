@@ -1,0 +1,52 @@
+Teaching System Fix
+- The bot should only trigger when the exact taught phrase (or a close variant) is detected, not just the first word.
+- Example:
+  Wrong: Triggered on "what"
+  Correct: Only triggers on "what is spiritual battlegrounds" or "what is spiritual battlegrounds?"
+- The teaching command format should be:
+  !teach [trigger] [response]
+  Example: 
+  !teach what is spiritual battlegrounds? Spiritual Battlegrounds is a Roblox Battlegrounds game based on the anime "Dan Da Dan" that focuses on exciting combat and community engagement.
+
+2. Unteach Command
+- When running !unteach [trigger], the bot should remove the entire entry based on the trigger name (not ID numbers unless specified).
+- Example: !unteach what is spiritual battlegrounds removes that exact trained response.
+
+3. AI Response Clean-up
+- The bot should never repeat the user’s question back in the response.
+- Example:
+  Wrong: "What is Spiritual Battlegrounds? Spiritual Battlegrounds is..."
+  Correct: "Spiritual Battlegrounds is a Roblox Battlegrounds game based on the anime 'Dan Da Dan' and it’s made to engage the community."
+
+4. Command Example Behavior
+User: !teach @Spiritual the game is about an anime named DanDaDan  
+Bot: Taught successfully. When users ask something related to "the game", I’ll respond with:  
+"The game is based on the anime DanDaDan."
+
+Then, when someone says:
+User: what is the game about?  
+Bot: The game is based on the anime DanDaDan.
+
+5. Reply Filters
+- The bot should only respond to messages that:
+  - Mention its trigger or prefix (! or @Spiritual)
+  - Contain the exact or close trained trigger phrase
+  - Are not commands (skip generic messages like "yo", "hi", or "I need help" unless taught)
+
+6. Context Check
+- If someone asks a question that isn’t trained, respond with:
+  "I’m not taught about that yet. You can teach me with:  
+  !teach [question] [answer]"
+
+7. No Random Responses
+- The bot should not invent or generate unrelated replies. Stick only to:
+  - Trained data
+  - Approved fallback responses (like "not taught yet")
+
+8. Optional Enhancements
+- Add timestamp to successful teach and unteach confirmations:
+  Example:
+  Bot trained successfully at 9:36 PM  
+  Response removed at 9:41 PM
+
+# END OF FIX

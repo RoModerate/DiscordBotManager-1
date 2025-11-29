@@ -1,0 +1,15 @@
+The agent must not produce any module errors. The project must not try to load a path called /app. The agent must load only from the correct working directory and must never reference missing modules. The agent must run without MODULE_NOT_FOUND or any pella console errors. The package setup must use a valid and clean package configuration with correct JSON formatting, valid scripts, and the correct Node version. The agent must rely on a stable Node environment such as version 16.14.2 to ensure compatibility with discord.js v13. The test script must be formatted correctly so JSON does not break, and the project must install dependencies cleanly without failing.
+
+The agent must only speak inside the following ticket channels: support ticket with ID 1436498409153626213, request cc with ID 1436498445216256031, and warning appeal with ID 1436498528544227428. It must ignore all other channels.
+
+When a user opens a ticket, the agent must automatically claim it using the ticket manager role 1383270362707656774. It must ping the ticket message when claiming. The agent must read and understand the reason the user selected when opening the ticket and use that information to guide how it responds.
+
+The agent must adjust the title based on the category. For support tickets it must say support. For request cc it must say request. For warning appeals it must say warning appeal. The agent must not add extra words or change the category text beyond what fits the type.
+
+When the user sends a message inside the ticket, the agent must reply. If the user says they want to close the ticket or says they are done, the agent must confirm, close the ticket, and automatically generate and send a transcript inside the correct category folder.
+
+If the user asks for a staff member or a specific person, the agent must ping the support ticket role properly.
+
+The agent must also include a teaching module. When the user calls the !teach command, the agent must learn the information provided. It must apply that knowledge in future responses but rewritten properly in its own words. The teaching feature must improve the accuracy and quality of responses inside tickets and should not copy the user word for word.
+
+Everything must run smoothly and consistently. The agent must respond cleanly, behave predictably, follow the prefix system already created, and must not interfere with existing systems such as the ticket panel commands or designs you already set up.

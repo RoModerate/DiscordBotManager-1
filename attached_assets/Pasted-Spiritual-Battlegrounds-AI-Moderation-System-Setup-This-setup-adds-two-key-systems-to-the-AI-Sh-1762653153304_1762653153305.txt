@@ -1,0 +1,135 @@
+Spiritual Battlegrounds — AI Moderation System Setup
+
+This setup adds two key systems to the AI:
+
+Shift Tracking (Start / End)
+
+Staff Management (Promotion / Infraction)
+
+Shift Tracking System
+1. shift start
+Command: shift start [duration]
+
+
+Purpose: Begins a moderation shift.
+The AI logs when a moderator starts their shift and tracks how long they’ll be active.
+
+Example Usage:
+
+!shift start 2h
+
+
+When used:
+
+The AI confirms the shift start with a success message.
+
+It notes who started the shift, when it began, and the expected duration.
+
+The AI saves this information and automatically knows who is currently on duty.
+
+Shift Start Log Channel:
+
+<#1436895113820373144>
+
+2. shift end
+Command: shift end
+
+
+Purpose: Ends the moderator’s current shift.
+When the shift ends, the AI calculates total time spent and sends a summary log.
+
+Example Usage:
+
+!shift end
+
+
+AI Log Details:
+
+Moderator name
+
+Shift start and end time
+
+Total duration
+
+Optional notes if added automatically or manually
+
+Shift End Log Channel:
+
+<#1436895129615995060>
+
+Example Log Entry:
+
+Shift Ended:
+Moderator: @Username
+Started: 12:45 PM
+Ended: 3:45 PM
+Duration: 3 Hours
+Status: Completed Successfully
+
+Staff Management System
+3. promotion
+Command: promotion [@user] [new rank]
+
+
+Purpose: Used to promote staff members to higher ranks.
+Only Owners, Co-Owners, Managers, or High Staff can use this command.
+
+Example Usage:
+
+!promotion @SpiritualHelper Moderator
+
+
+AI Action:
+
+Logs the promotion to the Promotion Channel
+
+Tags both the promoted staff and the issuer
+
+Notes the date and time of the promotion
+
+Promotion Log Channel:
+
+<#1436895147206901810>
+
+4. infraction
+Command: infraction [@user] [reason]
+
+
+Purpose: Logs a rule violation or staff infraction.
+
+Example Usage:
+
+!infraction @Member Misuse of mod commands
+
+
+AI Action:
+
+Sends a clear, formatted log to the Infraction Channel
+
+Notes who issued it, who received it, and the reason
+
+Infraction Log Channel:
+
+<#1436895168367169637>
+
+Example Log Entry:
+
+Staff Infraction Logged
+User: @Member
+Reason: Misuse of mod commands
+Date: November 8, 2025
+Issued By: @ManagerName
+
+AI Functionality Notes
+
+The AI should:
+
+Accept commands only from valid staff roles (Owner, Co-Owner, Manager, or other authorized ranks).
+
+Track and store shift start/stop data cleanly, without duplicates or errors.
+
+Use plain text (not embeds) for logs and updates.
+
+Be able to learn or be taught new actions or responses if needed in the future.
+
+Avoid bugs such as false shift detection or logging mismatches.

@@ -1,0 +1,90 @@
+I’m having multiple issues with my Discord bot and need you to fix and redesign it properly. Please read everything carefully and make sure there are no bugs or errors at all.
+
+Verification System
+
+The verification message sends duplicates (for example: “Verification Complete” appears twice). Fix this so it only sends once.
+
+I want the verification system to use a single button (no embed).
+
+The button should be gray (disabled) until a user can verify, and the blue button should redirect users to this channel ID: 1389999965979283608 if they try to verify without permission.
+
+When verified, it should show the verified users properly.
+
+The message for verification should not auto-delete.
+
+Ticket System
+
+The ticket panel design is bad — please redesign it properly and cleanly.
+
+Include a category-based selection with clear options:
+
+Support Ticket
+
+Content Creator Request
+
+Report a Member
+
+Warning Appeal
+
+When a ticket is created, it should include:
+
+User’s name in the channel title (e.g., “W-username” or “R-username”).
+
+Category letters: “S” for Support, “R” for Report, “W” for Warning.
+
+A status indicator (✅ Green = Claimed, ❌ Red = Not Claimed).
+
+Automatically ping this staff user ID: 1383270362707656774 in each ticket.
+
+Add a claim button inside this channel ID: 1409304816718709006.
+
+Fix all existing bugs and make sure the ticket panel runs smoothly.
+
+Level System
+
+When a user levels up, send a plain text message (no embed) in this channel ID: 1409304816718709006 saying:
+
+@user is now Level [x]! Keep chatting to earn more levels!
+
+
+Make sure it actually triggers when users talk.
+
+Slash Commands and Dot Commands
+
+Fix all slash ( / ) and dot ( . ) commands — some don’t show or work properly.
+
+Make sure all commands appear and run smoothly without bugs.
+
+Include working commands: .purge, /config, .say, /say, /dm, /giveaway, and setup verification.
+
+For /config, remove “coming soon” and fully finish it — allow owners to configure setup and verification.
+
+Counting Channel
+
+Channel ID: 1431428103674138634
+
+Users must count from 1 to 5000.
+
+If a user makes a mistake, they get 5 chances total.
+
+Add a 5-second cooldown before they can type again.
+
+If they try typing too fast, show: “Please wait before typing again.”
+
+When the number is correct, add a ✅ checkmark.
+
+Add Spanish translation support for the counting system.
+
+General
+
+Add /dm to allow the bot to DM users.
+
+The bot must stay in Do Not Disturb (DND) mode at all times.
+
+It should also join and stay in this voice channel ID: 1418915825716559884 automatically.
+
+No embeds unless necessary — keep messages clean and minimal.
+
+Make sure everything works perfectly when deployed on Pella.app (for hosting).
+
+Please double-check everything to make sure no duplicates, bugs, or missing commands exist. Keep it stable, simple, and organized.

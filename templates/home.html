@@ -1,0 +1,283 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spiritual Battlegrounds</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0B0E11;
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background: rgba(11, 14, 17, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+        }
+
+        .logo-text {
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #5865F2 0%, #7289DA 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #B9BBBE;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #fff;
+        }
+
+        .btn-primary {
+            background: #5865F2;
+            color: #fff;
+            padding: 10px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background: #4752C4;
+            transform: translateY(-2px);
+        }
+
+        .hero {
+            padding: 120px 2rem 80px;
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-logo {
+            width: 200px;
+            height: 200px;
+            border-radius: 30px;
+            margin-bottom: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #5865F2 0%, #7289DA 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: #B9BBBE;
+            margin-bottom: 2rem;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background: #5865F2;
+            color: #fff;
+            padding: 16px 48px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            margin-bottom: 4rem;
+        }
+
+        .cta-btn:hover {
+            background: #4752C4;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(88, 101, 242, 0.4);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem 4rem;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(88, 101, 242, 0.1) 0%, rgba(114, 137, 218, 0.1) 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(88, 101, 242, 0.2);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #5865F2;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #B9BBBE;
+            font-size: 1rem;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: #5865F2;
+            transform: translateY(-5px);
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #5865F2;
+        }
+
+        .feature-desc {
+            color: #B9BBBE;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo-container">
+            <img src="/static/icon.webp" alt="Logo" class="logo" onerror="this.src='/static/icon.png'">
+            <span class="logo-text">Spiritual Battlegrounds</span>
+        </div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/login" class="btn-primary">Sign In</a>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <img src="/static/icon.webp" alt="Spiritual Battlegrounds" class="hero-logo" onerror="this.src='/static/icon.png'">
+        <h1>Update v3.16.0</h1>
+        <p>Advanced AI-powered Discord bot with autonomous ticket management and intelligent learning systems</p>
+        <a href="https://discord.gg/yourinvite" class="cta-btn">Play Now</a>
+    </div>
+
+    <div class="container">
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-value" id="bot-status">Online</div>
+                <div class="stat-label">Bot Status</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="ai-status">Active</div>
+                <div class="stat-label">AI Operations</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">740</div>
+                <div class="stat-label">Server Members</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="teach-count">0</div>
+                <div class="stat-label">Taught Responses</div>
+            </div>
+        </div>
+
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-title">AI Agent</div>
+                <div class="feature-desc">Autonomous AI handles tickets, learns from conversations, and provides intelligent responses with full context awareness</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-title">Smart Tickets</div>
+                <div class="feature-desc">AI autonomously handles Support, Reports, Appeals, and CC requests with natural conversation</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-title">Memory System</div>
+                <div class="feature-desc">Server-wide message logging allows contextually aware responses across all interactions</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function loadStats() {
+            try {
+                const statusRes = await fetch('/status');
+                const statusData = await statusRes.json();
+                
+                document.getElementById('bot-status').textContent = statusData.bot_status;
+                document.getElementById('ai-status').textContent = statusData.ai_ops_enabled ? 'Active' : 'Stopped';
+                
+                const teachesRes = await fetch('/teaches');
+                const teachesData = await teachesRes.json();
+                document.getElementById('teach-count').textContent = teachesData.teaches ? Object.keys(teachesData.teaches).length : 0;
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+        
+        loadStats();
+        setInterval(loadStats, 10000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}Shift Log - Spiritual Battlegrounds{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>📋 Shift Log</h1>
+    <p>Track staff activity and shift schedules</p>
+</div>
+
+<div class="card" style="margin-bottom: 2rem;">
+    <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem; color: #8a2be2;">Current Shift</h2>
+    <div style="text-align: center; padding: 2rem;">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">⏰</div>
+        <div style="font-size: 1.5rem; font-weight: 700; color: #da70d6;" id="current-time">Loading...</div>
+        <div style="color: #b0b0b0; margin-top: 0.5rem;">Server Time</div>
+    </div>
+</div>
+
+<div class="card" style="margin-bottom: 2rem;">
+    <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem; color: #8a2be2;">Log Your Shift</h2>
+    <form id="shiftForm" style="display: grid; gap: 1.5rem;">
+        <div>
+            <label style="display: block; color: #da70d6; font-weight: 600; margin-bottom: 0.5rem;">Staff Member</label>
+            <input type="text" id="staffName" value="{{ session.username }}" readonly
+                   style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.05); border: 2px solid rgba(138,43,226,0.3); border-radius: 8px; color: #fff;">
+        </div>
+
+        <div>
+            <label style="display: block; color: #da70d6; font-weight: 600; margin-bottom: 0.5rem;">Activity Type</label>
+            <select id="activityType"
+                    style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.05); border: 2px solid rgba(138,43,226,0.3); border-radius: 8px; color: #fff;">
+                <option value="shift-start">Shift Start</option>
+                <option value="shift-end">Shift End</option>
+                <option value="ticket-handled">Ticket Handled</option>
+                <option value="moderation-action">Moderation Action</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+
+        <div>
+            <label style="display: block; color: #da70d6; font-weight: 600; margin-bottom: 0.5rem;">Notes</label>
+            <textarea id="notes" rows="4" placeholder="Add any relevant notes..."
+                      style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.05); border: 2px solid rgba(138,43,226,0.3); border-radius: 8px; color: #fff; resize: vertical;"></textarea>
+        </div>
+
+        <button type="submit" class="btn">Log Activity</button>
+    </form>
+    <div id="shift-alert" class="alert" style="display: none; margin-top: 1rem;"></div>
+</div>
+
+<div class="card">
+    <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem; color: #8a2be2;">Recent Activity</h2>
+    <div id="recentActivity" style="max-height: 400px; overflow-y: auto;">
+        <div style="text-align: center; color: #b0b0b0; padding: 3rem;">
+            <p>No recent activity logged</p>
+            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Activity logs will appear here</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+function updateTime() {
+    const now = new Date();
+    const timeString = now.toLocaleString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true,
+        timeZoneName: 'short'
+    });
+    document.getElementById('current-time').textContent = timeString;
+}
+
+document.getElementById('shiftForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const activityType = document.getElementById('activityType').value;
+    const notes = document.getElementById('notes').value;
+    const alertDiv = document.getElementById('shift-alert');
+    
+    alertDiv.className = 'alert alert-success';
+    alertDiv.textContent = 'Activity logged successfully!';
+    alertDiv.style.display = 'block';
+    
+    document.getElementById('notes').value = '';
+    
+    setTimeout(() => {
+        alertDiv.style.display = 'none';
+    }, 3000);
+});
+
+updateTime();
+setInterval(updateTime, 1000);
+{% endblock %}

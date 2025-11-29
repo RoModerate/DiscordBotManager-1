@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Spiritual Battlegrounds{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>Staff Dashboard</h1>
+    <p>Welcome back, {{ session.username }}!</p>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+    <div class="card" onclick="window.location.href='/bot-control'" style="cursor: pointer;">
+        <div style="font-size: 3rem; text-align: center; margin-bottom: 1rem;">🤖</div>
+        <h2 style="font-size: 1.5rem; margin-bottom: 1rem; text-align: center;">Bot Control</h2>
+        <p style="color: #b0b0b0; text-align: center;">Start, stop, and manage the Discord bot</p>
+    </div>
+
+    <div class="card" onclick="window.location.href='/ai-memory'" style="cursor: pointer;">
+        <div style="font-size: 3rem; text-align: center; margin-bottom: 1rem;">🧠</div>
+        <h2 style="font-size: 1.5rem; margin-bottom: 1rem; text-align: center;">AI Memory</h2>
+        <p style="color: #b0b0b0; text-align: center;">View server-wide message logs</p>
+    </div>
+
+    <div class="card" onclick="window.location.href='/staff-handbook'" style="cursor: pointer;">
+        <div style="font-size: 3rem; text-align: center; margin-bottom: 1rem;">📚</div>
+        <h2 style="font-size: 1.5rem; margin-bottom: 1rem; text-align: center;">Staff Handbook</h2>
+        <p style="color: #b0b0b0; text-align: center;">Server guidelines and procedures</p>
+    </div>
+
+    <div class="card" onclick="window.location.href='/shift-log'" style="cursor: pointer;">
+        <div style="font-size: 3rem; text-align: center; margin-bottom: 1rem;">📋</div>
+        <h2 style="font-size: 1.5rem; margin-bottom: 1rem; text-align: center;">Shift Log</h2>
+        <p style="color: #b0b0b0; text-align: center;">Track staff activity and shifts</p>
+    </div>
+
+    <div class="card" onclick="window.location.href='/tickets'" style="cursor: pointer;">
+        <div style="font-size: 3rem; text-align: center; margin-bottom: 1rem;">🎫</div>
+        <h2 style="font-size: 1.5rem; margin-bottom: 1rem; text-align: center;">Tickets</h2>
+        <p style="color: #b0b0b0; text-align: center;">View ticket operations</p>
+    </div>
+</div>
+{% endblock %}

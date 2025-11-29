@@ -1,0 +1,146 @@
+Step 2 — Command System Overhaul
+
+Fix the issue where slash commands and prefix commands (. commands) don’t respond or show up.
+
+Ensure all commands are registered properly with Discord’s API on startup.
+
+Add a reload command (/reload or .reload) to refresh all commands without restarting the bot.
+
+Commands must work for both formats:
+
+Prefix = .command
+
+Slash = /command
+
+Fix issue where .setupverify deletes itself or vanishes — make the bot send persistent messages that stay in chat until deleted by staff.
+
+Step 3 — Verify System Fix
+
+Channel ID for verification: 1423669807521202247
+
+The command /setupverify or .setupverify should create a persistent embed like:
+
+Welcome to the server!
+Press "Verify" below to gain access.
+
+
+Add a button labeled Verify
+
+When pressed, give the user the “Verified” role and send them a DM confirming success.
+
+Make sure the embed does NOT delete automatically after sending.
+
+Add permissions so only admins can run /setupverify.
+
+Step 4 — /config Redesign
+
+Remove the “Coming Soon” message.
+
+Create a full /config command that opens an interactive embed panel with dropdowns for:
+
+Setting the log channel
+
+Setting the ticket category
+
+Setting the verification channel & role
+
+Setting the welcome message
+
+Setting the counting channel
+
+Each dropdown should let the admin update values instantly.
+
+Store all configurations in the bot’s database so settings persist after restarts.
+
+Add a confirmation message:
+✅ Configuration saved successfully!
+
+Step 5 — Ticket System Fix
+
+Fix the current broken ticket panel and redesign it:
+
+Ticket categories:
+
+Support Ticket
+
+Report a Member
+
+Warning Appeal
+
+Content Creator Request
+
+Each ticket should create a private channel visible to the user + staff.
+
+Add buttons for:
+
+Claim Ticket
+
+Close Ticket
+
+Claim adds a green ✅ next to the channel name.
+
+Closing auto-archives the channel after 24h.
+
+Add logs for ticket creation and closure in the configured log channel.
+
+Make sure the ticket creation panel does not vanish or delete automatically.
+
+Step 6 — Countdown System Fix
+
+Add a countdown timer that works properly (no freezing or desync).
+
+Let admins start a countdown via /countdown [time] [message].
+
+The message should update every minute showing remaining time, then say “Countdown complete!” when done.
+
+Step 7 — Counting Channel Fix
+
+Channel ID: 1431428103674138634
+
+The bot should automatically track the counting game there:
+
+Start from 1
+
+If someone types the wrong number, reply: ❌ Wrong number, try again.
+
+If someone types twice in a row, reply: ⚠️ Wait your turn.
+
+Add cooldown and persist last number in the database.
+
+When 5000 is reached, send a congrats embed.
+
+Step 8 — General Improvements
+
+Make sure no embed or config message disappears automatically unless deleted manually.
+
+All embeds should use a consistent clean design with color #5865F2 (Discord blue).
+
+Add error handling: if something breaks, the bot sends an error message instead of crashing.
+
+On startup, send a console log confirming:
+
+✅ Bot is online and connected.
+✅ Slash commands loaded.
+✅ Prefix commands loaded.
+✅ Joined Voice Channel 1418915825716559884
+
+
+Remove all “Coming Soon” or placeholder features.
+
+Step 9 — Debugging Checklist
+
+Before completion, test and confirm that:
+
+.setupverify and /setupverify work correctly.
+
+/config runs and saves data.
+
+.ticket and /ticket create and manage tickets correctly.
+
+Countdown works without bugs.
+
+Counting system functions without crashing.
+
+Bot joins voice channel automatically and stays connected.
+
+No command deletes or disappears unless the user removes it.

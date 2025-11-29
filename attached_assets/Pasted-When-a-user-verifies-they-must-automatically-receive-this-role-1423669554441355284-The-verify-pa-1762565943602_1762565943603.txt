@@ -1,0 +1,100 @@
+When a user verifies, they must automatically receive this role: 1423669554441355284.
+
+The verify panel should only show two buttons:
+
+Gray Verify button (verifies the user).
+
+Blue Need Help? button that redirects to channel: 1389999965979283608.
+
+Remove any embed text like “Click the button below to verify…”
+
+When a user verifies, send a DM saying:
+
+Verification Complete!
+You’ve been successfully verified in @servername.
+Also show their Roblox username, avatar, and send a log of that info to channel: 1411710143598690404.
+
+AI System:
+
+The AI chat system does not work. Replace it with a free AI API that actually responds fast and realistically (not just generic generated text).
+
+Example free API: https://www.apifreellm.com/docs
+
+Make /aisetup properly enable the AI and respond to pings normally.
+
+Ticket System:
+
+Completely redesign !ticketpanel with proper Discord markdowns like **bold**, code, and code blocks for a clean design (no emojis in the description text).
+
+Add a select menu with these exact labeled emojis next to their names:
+
+Support Ticket → <:7452jijiquestion:1412831191098327070> → Category ID: 1436498409153626213
+
+Request CC → <:7502kintaimmensementalfortitude:1412831174752997386> → Category ID: 1436498445216256031
+
+Report a Member → <:82674shrimpalerted:1412831155404800061> → Category ID: 1436498495153635512
+
+Warning Appeal → ⚠️ → Category ID: 1436498528544227428
+
+Ticket channels must be named like this:
+
+Unclaimed: 《🔴》username
+
+Claimed: 《🟢》username
+
+When claimed, send an embed (not a normal message) that says:
+
+This ticket has been claimed by @user.
+
+Include an embed field showing
+Reason: <user's input>
+
+Display the user’s Roblox avatar (small) on the embed’s side, with a clickable link.
+
+When a ticket is closed, ask for a closing reason and automatically send a transcript to: 1420538005936013403.
+
+Counting Channel:
+
+Counting channel: 1431428103674138634
+
+Fix it so it actually reacts to correct counts with ✅ and tracks mistakes (max 5 allowed).
+
+Remove Spanish completely.
+
+Level System:
+
+Level up messages should start from Level 1 and increase based on activity.
+
+Send level-up messages (text only, no embed) in channel: 1409304816718709006.
+
+Welcome System:
+
+Fix the welcome system — it’s not triggering at all.
+
+When a user joins, send a message in 1409299795318804612 saying:
+
+Welcome @user to @servername!
+
+/Config Command:
+
+Redesign /config fully:
+
+Use clean gray Discord markdown buttons only (Next, Previous, Reload, Submit).
+
+Owner should be able to assign which role can use each command.
+
+Must save and update settings properly (no more “❌ Ticket category not configured” errors).
+
+/Logs Command:
+
+Add a /logs command that shows recent moderation actions and system events.
+
+Overall Fixes:
+
+No duplicate messages anywhere (especially during verification).
+
+Fix any “This is not a valid ticket channel” or “interaction failed” errors.
+
+Keep the bot status on Do Not Disturb.
+
+Optimize all code to ensure no lag, no crashes, no double responses, and fast execution.

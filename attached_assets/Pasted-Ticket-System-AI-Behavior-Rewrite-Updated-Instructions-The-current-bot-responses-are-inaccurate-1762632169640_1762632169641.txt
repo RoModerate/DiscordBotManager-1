@@ -1,0 +1,131 @@
+Ticket System & AI Behavior Rewrite (Updated Instructions)
+
+The current bot responses are inaccurate and buggy, and several issues must be fixed immediately. The following updates define how the AI, ticket system, and behavior should function properly and accurately:
+
+1. Accuracy Fix
+
+The bot must give accurate, live data — no guessing or false information.
+
+Example issue:
+The bot said there were “16 channels,” but the real count was different.
+✅ Fix this by having the bot read the actual number of channels from the server, not generate random estimates.
+
+2. Ticket Opening System (Critical Fix)
+
+When a user opens a ticket, no emojis should appear (❌🔒⚙️ etc. → remove all).
+
+Instead of saying @unknown-user, the bot must use the actual username of the person who opened the ticket.
+
+Example:
+
+Ticket opened by @Spiritual
+Reason: [User’s input reason]
+
+
+No embedded message for ticket creation — plain text only for these categories:
+
+Support Ticket → 1436498409153626213
+
+Request CC → 1436498445216256031
+
+Report a Member → 1436498495153635512
+
+Warning Appeal → 1436498528544227428
+
+3. Ticket Behavior
+
+When a user opens a ticket, the AI must:
+
+Read and understand the reason the user submitted.
+
+Respond directly (not in embeds), helping the user step by step based on that reason.
+
+Ask questions or provide guidance related to the category (for example, if it’s a “Warning Appeal,” the bot should ask for the warning details).
+
+If the user says STOP, the AI stops responding immediately.
+
+If the user says START, the AI resumes exactly where it left off.
+
+The AI must be context-aware, not lose memory mid-conversation.
+
+4. Ticket Claiming and Closing
+
+When a staff member claims a ticket, the bot should say:
+This ticket has been claimed by @StaffMember
+
+When a ticket is closed:
+
+The bot must ask for the reason for closing.
+
+Then log the full transcript into the transcript channel: 1420538005936013403
+
+No emoji or embed for these messages either — keep it all plain, readable text.
+
+5. “Already Have Ticket” Bug
+
+Fix the issue where the bot says:
+
+❌ You already have an open Support Ticket.
+
+
+even when the user doesn’t.
+
+The bot must check the actual ticket channels before saying that.
+If the user doesn’t have a ticket open, it should allow them to create one.
+
+6. Select Menu Emojis
+
+Use the following exact emojis and labels for the select menu options (keep this precise formatting):
+
+Support Ticket → <:7452jijiquestion:1412831191098327070>
+Request CC! → <:7502kintaimmensementalfortitude:1412831174752997386>
+Report a Member! → <:82674shrimpalerted:1412831155404800061>
+Warning Appeal → ⚠️
+
+
+Each option must have the emoji next to the title in the select menu (not in the message body).
+
+7. AI Training and Memory
+
+Ensure that the !teach command fully works:
+
+When a user teaches the bot something, it must store that permanently (until cleared).
+
+The AI must learn server details such as:
+
+Channel names and IDs
+
+Staff role names and permissions
+
+Usernames and their Roblox usernames (through Bloxlink integration)
+
+When asked questions like “where is the support category,” the AI should answer accurately using saved memory.
+
+The AI must not repeat the same question back — it should learn, remember, and act.
+
+8. Category-Based AI Response Logic
+
+The AI must automatically behave differently depending on which category the ticket is opened in:
+
+Support Ticket (1436498409153626213):
+Greet the user, ask what issue they’re facing, and try to resolve it.
+
+Request CC (1436498445216256031):
+Ask the user for their custom command idea, format, and purpose.
+
+Report a Member (1436498495153635512):
+Ask for evidence, player username, and description of what happened.
+
+Warning Appeal (1436498528544227428):
+Ask for which warning they’re appealing, why it should be removed, and any proof.
+
+Each of these responses must be plain text (no embeds), short, and professional.
+
+9. Behavior Summary
+
+✅ No embeds for ticket replies in the 4 main categories.
+✅ No emojis (like ❌, 🔒, etc.) anywhere except for the select menu options.
+✅ The bot must use the correct username of the user.
+✅ Fix all inaccurate responses (AI must use real data).
+✅ Fully fix the “already have ticket” bug.
+✅ Make the AI category-smart, memory-based, and accurate in all responses.

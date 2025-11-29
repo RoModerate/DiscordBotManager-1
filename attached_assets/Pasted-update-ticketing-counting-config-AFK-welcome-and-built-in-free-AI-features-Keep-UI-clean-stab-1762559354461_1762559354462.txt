@@ -1,0 +1,187 @@
+update ticketing, counting, config, AFK, welcome, and built-in free AI features. Keep UI clean, stable, and bug-free. Persist all settings to the server database.
+
+Counting Channel — remove Spanish
+
+Channel ID: 1409299795318804612
+
+Remove any Spanish text from the counting system so replies are English only.
+
+Keep existing cooldowns, mistake tracking and reactions intact — only remove bilingual responses.
+
+Welcome message
+
+When a new user joins the guild, send a plain-text welcome in the configured welcome channel or fallback to a default channel.
+
+Format:
+
+Welcome @user to (server name). Please read the rules and enjoy your stay.
+
+
+Make the target welcome channel configurable via /config (owner only).
+
+/config redesign (owner configurable, no bugs)
+
+Replace the old /config with a fully interactive, paged configuration UI (single /config command). Only the server owner and designated admin roles can use certain pages. Persist everything to DB.
+
+UI controls: Previous, Next, Reload, Submit buttons. Use ephemeral confirmations for changes.
+
+Configuration capabilities (at minimum):
+
+Set who can run which commands (role → allowed commands mapping).
+
+Configure ticket category IDs and ticket channel targets.
+
+Configure verification channel, verified role, and verify redirect channel.
+
+Configure welcome channel.
+
+Configure staff ping user/role for tickets.
+
+Toggle built-in AI on/off and set the AI provider endpoint.
+
+Validation: when saving a channel/role ID, validate it exists in the guild; return friendly errors if invalid.
+
+Make /config simple and robust; no placeholder “coming soon.” Show current values, let owner edit and submit.
+
+AFK system
+
+Add /afk (slash) and .afk (dot) command. Allow a duration parameter (e.g., /afk 30m) and optional reason.
+
+Add /unafk / .unafk.
+
+Optional flags:
+
+muted=true/false — if true, auto-assign a muted role while AFK (configurable muted role via /config).
+
+When a user is AFK and mentioned, the bot should notify the mentioner with the user’s AFK reason and remaining time.
+
+Persist AFK states in DB.
+
+Ticket Panel redesign & exact mapping
+
+The ticket panel should be a single persistent message (no ugly layout) with four clearly labeled buttons (include the emoji labels you provided):
+
+Support ticket — <:7452jijiquestion:1412831191098327070>
+
+Request CC — <:7502kintaimmensementalfortitude:1412831174752997386>
+
+Report a Member — <:82674shrimpalerted:1412831155404800061>
+
+Warning Appeal — ⚠️
+
+Behavior on click: when a user clicks any of these buttons, open a modal (UI) that asks: “Reason for opening this ticket” (single-line or multi-line input). Do not create a second button step — modal should appear automatically after selection.
+
+Ticket categories & target channels (use these exact category IDs):
+
+Support ticket → category ID 1436498409153626213
+
+Request CC → category ID 1436498445216256031
+
+Report player → category ID 1436498495153635512
+
+Warning appeal → category ID 1436498528544227428
+
+Channel naming & claim indicator:
+
+New ticket channel name format: <tag>-username where tag is S / R / CC / W (example: S-johnsmith).
+
+Show a status indicator in the channel name or topic; visually represent claimed vs unclaimed:
+
+Unclaimed: red circle marker (e.g., prefix 🔴-S-username or channel topic Status: UNCLAIMED)
+
+Claimed: green circle marker (e.g., 🟢-S-username or topic Status: CLAIMED by StaffName)
+
+When a staff member claims the ticket, update the status (channel name/topic) and record who claimed it in DB.
+
+Pings & notifications:
+
+When the ticket is created, ping the user and automatically ping the staff user ID: 1383270362707656774.
+
+Also ping the staff role configured in /config (if set).
+
+Transcript & closure:
+
+When a ticket is closed, generate a transcript (plain text or simple HTML) and send it to transcript channel ID: 1420538005936013403. Include:
+
+Ticket ID
+
+Ticket type
+
+Creator (user tag + id)
+
+Staff who claimed the ticket (tag + id)
+
+Full message history (timestamped)
+
+Persist closure info to DB (closedBy, closedAt, transcriptLink or text).
+
+Permissions: ticket channels should be private (visible to ticket creator + staff role + owner). Validate permission overwrites upon creation.
+
+Ticket UX specifics
+
+Use consistent, minimal styling — no embeds unless necessary. Keep messages clean and readable.
+
+Modal input (reason) should appear on open and get displayed in the ticket channel as the initial message (timestamped and clearly labeled “Issue description:” ).
+
+Add Claim and Close buttons inside each ticket channel. Claim records claimer; Close triggers transcript + archive.
+
+Built-in free AI chat + !teach
+
+Integrate a free LLM endpoint like https://www.apifreellm.com/docs (or a configurable free endpoint). Make the AI provider configurable in /config so owner can swap endpoints later. Respect provider usage limits and add rate-limiting to avoid abuse.
+
+Add a ping-based chat feature:
+
+If a user mentions the bot or uses !ask or @Bot ask ..., the bot forwards the prompt to the configured free AI and responds in-channel.
+
+Add caching: if identical questions are asked frequently, reuse the previous answer for N minutes to reduce API usage.
+
+Add !teach (dot or prefix) command:
+
+!teach "trigger phrase" => "response" (owner/moderator configurable who can teach). Store these pairs in DB.
+
+When future messages or tickets contain the trigger phrase (exact or fuzzy match), the bot should prefer the stored response before calling the external AI.
+
+Provide admin commands:
+
+!teach list — list stored teaches (paginated).
+
+!teach remove <id> — remove training entry.
+
+Store taughtBy and timestamp for audit.
+
+Misc / stability / DB & permissions
+
+Persist all config and dynamic state to DB (tickets, claims, AFK states, teaches, counting state). Don’t rely on in-memory state only.
+
+Validate every user-supplied ID before saving (channels/roles). Provide friendly errors if invalid.
+
+Add rate limits for AI endpoints, ticket creation, and public command usage to prevent abuse.
+
+Add logging for ticket creation, claims, transcript saves, and AI usage for debugging.
+
+Testing & acceptance criteria
+Before delivering, run automated/manual tests and ensure:
+
+Clicking each ticket button opens a modal, creates the ticket in the correct category and channel name matches spec.
+
+Claiming updates status and stores claimer.
+
+Closing creates transcript in 1420538005936013403 and includes claimer info.
+
+/config saves and loads settings and validates IDs.
+
+AFK and unafk functions work and persist.
+
+Built-in free AI responds and !teach entries are used and listed.
+
+Counting channel 1409299795318804612 is English only.
+
+No duplicate messages, no auto-deleted verify messages, and no UI that disappears unexpectedly.
+
+Final notes to Replit AI
+
+Make the ticket panel, modal, and ticket channels robust against race conditions (prevent two tickets with same name; prevent double-claim).
+
+Keep UX minimal and professional (no extra emojis beyond the ones specified in the panel).
+
+If you must show any admin errors or logs, put them in an owner-only admin log channel (configurable).

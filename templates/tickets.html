@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Tickets - Spiritual Battleground{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>Autonomous Tickets</h1>
+    <p>AI-powered ticket management across 4 categories</p>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+    <div class="card">
+        <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem; color: #BA68C8;">🆘 Support</h3>
+        <p style="color: #b0b0b0; font-size: 0.9rem;">General help and support tickets</p>
+        <div style="margin-top: 1rem; color: #777; font-size: 0.85rem;">Category ID: 1436498409153626213</div>
+    </div>
+
+    <div class="card">
+        <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem; color: #FF6B9D;">⚠️ Report Player</h3>
+        <p style="color: #b0b0b0; font-size: 0.9rem;">Player reports and violations</p>
+        <div style="margin-top: 1rem; color: #777; font-size: 0.85rem;">Category ID: 1436498495153635512</div>
+    </div>
+
+    <div class="card">
+        <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem; color: #BA68C8;">📝 Warning Appeal</h3>
+        <p style="color: #b0b0b0; font-size: 0.9rem;">Appeal warnings and bans</p>
+        <div style="margin-top: 1rem; color: #777; font-size: 0.85rem;">Category ID: 1436498528544227428</div>
+    </div>
+
+    <div class="card">
+        <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem; color: #FF6B9D;">🎥 Request CC</h3>
+        <p style="color: #b0b0b0; font-size: 0.9rem;">Content creator requests</p>
+        <div style="margin-top: 1rem; color: #777; font-size: 0.85rem;">Category ID: 1436498445216256031</div>
+    </div>
+</div>
+
+<div class="card">
+    <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem;">How It Works</h2>
+    <div style="display: grid; gap: 1.5rem;">
+        <div style="padding: 1.5rem; background: rgba(255,255,255,0.03); border-radius: 10px;">
+            <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem; color: #BA68C8;">1. User Opens Ticket</h3>
+            <p style="color: #b0b0b0;">User selects ticket type and provides initial reason</p>
+        </div>
+
+        <div style="padding: 1.5rem; background: rgba(255,255,255,0.03); border-radius: 10px;">
+            <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem; color: #FF6B9D;">2. AI Greets & Responds</h3>
+            <p style="color: #b0b0b0;">AI reads the reason and provides intelligent first response</p>
+        </div>
+
+        <div style="padding: 1.5rem; background: rgba(255,255,255,0.03); border-radius: 10px;">
+            <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem; color: #BA68C8;">3. Autonomous Handling</h3>
+            <p style="color: #b0b0b0;">AI handles the conversation using server context and taught knowledge</p>
+        </div>
+
+        <div style="padding: 1.5rem; background: rgba(255,255,255,0.03); border-radius: 10px;">
+            <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem; color: #FF6B9D;">4. STOP/START Control</h3>
+            <p style="color: #b0b0b0;">Staff can type STOP to pause AI or START to resume at any time</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

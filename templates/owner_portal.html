@@ -1,0 +1,314 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Owner Portal - Spiritual Battlegrounds</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0B0E11;
+            color: #fff;
+        }
+
+        .navbar {
+            background: rgba(11, 14, 17, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+        }
+
+        .logo-text {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .control-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #5865F2;
+        }
+
+        .btn {
+            background: #5865F2;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 6px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            background: #4752C4;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: #ED4245;
+        }
+
+        .btn-danger:hover {
+            background: #C03537;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin: 1rem 0;
+        }
+
+        .status-online {
+            background: rgba(67, 181, 129, 0.2);
+            color: #43B581;
+        }
+
+        .status-offline {
+            background: rgba(237, 66, 69, 0.2);
+            color: #ED4245;
+        }
+
+        .teach-list {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 1rem;
+        }
+
+        .teach-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .teach-trigger {
+            font-weight: 600;
+            color: #5865F2;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            color: #fff;
+            margin-top: 0.5rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo-container">
+            <img src="/static/icon.webp" alt="Logo" class="logo" onerror="this.src='/static/icon.png'">
+            <span class="logo-text">Owner Portal</span>
+        </div>
+        <a href="/logout" class="btn" style="width: auto;">Logout</a>
+    </nav>
+
+    <div class="container">
+        <div class="control-panel">
+            <div class="card">
+                <h2>Bot Control</h2>
+                <div id="bot-status-badge" class="status-badge status-online">Checking...</div>
+                <button class="btn" onclick="startBot()">Start Bot</button>
+                <button class="btn btn-danger" onclick="stopBot()">Stop Bot</button>
+                <button class="btn" onclick="restartBot()">Restart Bot</button>
+            </div>
+
+            <div class="card">
+                <h2>AI Operations</h2>
+                <div id="ai-status-badge" class="status-badge status-online">Checking...</div>
+                <button class="btn" onclick="startAI()">Start AI</button>
+                <button class="btn btn-danger" onclick="stopAI()">Stop AI</button>
+            </div>
+
+            <div class="card">
+                <h2>Teach AI</h2>
+                <input type="text" id="teach-trigger" placeholder="Trigger phrase...">
+                <textarea id="teach-response" placeholder="Response..."></textarea>
+                <button class="btn" onclick="addTeach()">Add Response</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Taught Responses</h2>
+            <div class="teach-list" id="teach-list">
+                <p>Loading...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function updateStatus() {
+            const res = await fetch('/status');
+            const data = await res.json();
+            
+            const botBadge = document.getElementById('bot-status-badge');
+            botBadge.textContent = data.bot_status;
+            botBadge.className = 'status-badge ' + (data.bot_status === 'Online' ? 'status-online' : 'status-offline');
+            
+            const aiBadge = document.getElementById('ai-status-badge');
+            aiBadge.textContent = data.ai_ops_enabled ? 'Active' : 'Stopped';
+            aiBadge.className = 'status-badge ' + (data.ai_ops_enabled ? 'status-online' : 'status-offline');
+        }
+
+        async function loadTeaches() {
+            const res = await fetch('/teaches');
+            const data = await res.json();
+            const list = document.getElementById('teach-list');
+            
+            if (!data.teaches || Object.keys(data.teaches).length === 0) {
+                list.innerHTML = '<p>No taught responses yet</p>';
+                return;
+            }
+            
+            list.innerHTML = '';
+            for (const [id, teach] of Object.entries(data.teaches)) {
+                const item = document.createElement('div');
+                item.className = 'teach-item';
+                item.innerHTML = `
+                    <div>
+                        <div class="teach-trigger">${teach.trigger}</div>
+                        <div style="color: #B9BBBE; font-size: 0.9rem; margin-top: 0.25rem;">${teach.response.substring(0, 100)}...</div>
+                    </div>
+                    <button class="btn btn-danger" style="width: auto; margin: 0; padding: 8px 16px;" onclick="removeTeach('${id}')">Remove</button>
+                `;
+                list.appendChild(item);
+            }
+        }
+
+        async function startBot() {
+            const res = await fetch('/start');
+            const data = await res.json();
+            alert(data.message);
+            setTimeout(updateStatus, 2000);
+        }
+
+        async function stopBot() {
+            const res = await fetch('/stop');
+            const data = await res.json();
+            alert(data.message);
+            setTimeout(updateStatus, 2000);
+        }
+
+        async function restartBot() {
+            const res = await fetch('/restart');
+            const data = await res.json();
+            alert(data.message);
+            setTimeout(updateStatus, 3000);
+        }
+
+        async function startAI() {
+            const res = await fetch('/ai/start', { method: 'POST' });
+            const data = await res.json();
+            alert(data.message);
+            setTimeout(updateStatus, 1000);
+        }
+
+        async function stopAI() {
+            const res = await fetch('/ai/stop', { method: 'POST' });
+            const data = await res.json();
+            alert(data.message);
+            setTimeout(updateStatus, 1000);
+        }
+
+        async function addTeach() {
+            const trigger = document.getElementById('teach-trigger').value;
+            const response = document.getElementById('teach-response').value;
+            
+            const res = await fetch('/add_teach', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ trigger, response })
+            });
+            
+            const data = await res.json();
+            alert(data.message);
+            
+            if (data.success) {
+                document.getElementById('teach-trigger').value = '';
+                document.getElementById('teach-response').value = '';
+                loadTeaches();
+            }
+        }
+
+        async function removeTeach(id) {
+            const res = await fetch('/remove_teach', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ identifier: id })
+            });
+            
+            const data = await res.json();
+            alert(data.message);
+            
+            if (data.success) {
+                loadTeaches();
+            }
+        }
+
+        updateStatus();
+        loadTeaches();
+        setInterval(updateStatus, 5000);
+    </script>
+</body>
+</html>
