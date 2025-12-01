@@ -1,0 +1,13 @@
+services:
+  - type: worker
+    name: discord-bot
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python3 main.py
+    envVars:
+      - key: DISCORD_BOT_TOKEN
+        sync: false
+      - key: BLOXLINK_API_KEY
+        sync: false
+      - key: PYTHON_VERSION
+        value: "3.11"
